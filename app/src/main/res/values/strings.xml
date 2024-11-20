@@ -5,4 +5,14 @@
     <string name="title_camera">Camera</string>
     <string name="title_inbox">Inbox</string>
     <string name="title_profile">Profile</string>
+
+    <style name="BoldToolbarText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.CircularImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

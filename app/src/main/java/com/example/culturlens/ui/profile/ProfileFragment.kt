@@ -4,39 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.culturlens.databinding.FragmentProfileBinding
+import androidx.fragment.app.viewModels
+import com.example.culturlens.R
+import com.example.culturlens.SettingPreferences
+import com.example.culturlens.SettingPreferencesViewModel
+import com.example.culturlens.SettingsViewModelFactory
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class ProfileFragment : Fragment() {
 
-    private var _binding: FragmentProfileBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val profileViewModel =
-            ViewModelProvider(this).get(ProfileViewModel::class.java)
-
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        val textView: TextView = binding.textProfile
-        profileViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    private val viewModel: SettingPreferencesViewModel by viewModels {
+        SettingsViewModelFactory(SettingPreferences(requireContext()))
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+        val switchTheme = view.findViewById<SwitchMaterial>(R.id.switch_theme)
+
+        viewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive ->
+            switchTheme.isChecked = isDarkModeActive
+        }
+
+        switchTheme.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.saveThemeSetting(isChecked)
+        }
+
+        return view
     }
 }

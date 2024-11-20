@@ -8,4 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue_1">#01AFBA</color>
+    <color name="celadon_blue">#0081A7</color>
+    <color name="tiffany_blue">#00AFB9</color>
+    <color name="sandy_tan">#FED9B7</color>
+    <color name="bittersweet">#F07167</color>
+
 </resources>

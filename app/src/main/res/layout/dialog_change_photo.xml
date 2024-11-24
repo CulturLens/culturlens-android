@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Profile Photo"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="12dp"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/btnChooseFromLibrary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose from library"
+        android:textAllCaps="false"
+        android:drawableLeft="@drawable/ic_gallery"
+        android:backgroundTint="@color/white"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/btnTakeNewPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take new photo"
+        android:textAllCaps="false"
+        android:drawableLeft="@drawable/baseline_camera_alt_24"
+        android:backgroundTint="@color/white"
+        android:textColor="@android:color/black"/>
+
+</LinearLayout>

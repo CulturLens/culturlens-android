@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.culturlens.databinding.FragmentCameraBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.culturlens.R
+import com.example.culturlens.adapter.NotificationAdapter
+import com.example.culturlens.databinding.FragmentInboxBinding
+import com.example.culturlens.model.NotificationItem
 
 class InboxFragment : Fragment() {
 
-    private var _binding: FragmentCameraBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var _binding: FragmentInboxBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,16 +21,36 @@ class InboxFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val inboxViewModel =
-            ViewModelProvider(this).get(InboxViewModel::class.java)
-
-        _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        _binding = FragmentInboxBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textCamera
-        inboxViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
+        val newNotifications = listOf(
+            NotificationItem(R.drawable.ic_profile, "Fanny liked your post", "30 minutes ago"),
+            NotificationItem(R.drawable.ic_profile, "Sintya commented on your post", "1 hour ago")
+        )
+
+        val thisWeekNotifications = listOf(
+            NotificationItem(R.drawable.ic_profile, "Amsal commented on your post", "3 days ago"),
+            NotificationItem(R.drawable.ic_profile, "Adi Memes liked your post", "5 days ago")
+        )
+
+        val olderNotifications = listOf(
+            NotificationItem(R.drawable.ic_profile, "Nanda commented on your post", "1 week ago"),
+            NotificationItem(R.drawable.ic_profile, "Zaskia liked your post", "2 weeks ago")
+        )
+
+        // Set adapter untuk rvNew
+        binding.rvNew.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvNew.adapter = NotificationAdapter(newNotifications)
+
+        // Set adapter untuk rvThisWeek
+        binding.rvThisWeek.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvThisWeek.adapter = NotificationAdapter(thisWeekNotifications)
+
+        // Set adapter untuk rvOlder
+        binding.rvOlder.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvOlder.adapter = NotificationAdapter(olderNotifications)
+
         return root
     }
 

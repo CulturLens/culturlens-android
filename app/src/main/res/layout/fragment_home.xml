@@ -44,6 +44,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llShareSomething"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -69,7 +70,7 @@
                     android:layout_marginStart="12dp"
                     android:text="What's on your mind?"
                     android:textSize="16sp"
-                    android:textColor="@color/sand_hint" />
+                    android:textColor="@color/bittersweet" />
             </LinearLayout>
 
             <!-- Suggested For You Section -->

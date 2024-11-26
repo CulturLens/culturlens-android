@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
     android:padding="16dp">
 
     <LinearLayout
@@ -12,6 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:paddingTop="32dp"
         android:paddingBottom="16dp">
 
         <ImageView
@@ -35,10 +35,10 @@
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/profile_picture" />
+        android:contentDescription="Post Image" />
 
     <TextView
         android:id="@+id/tvPostContent"
@@ -47,6 +47,14 @@
         android:text="I found a hidden gem in Uluwatu! #Pura"
         android:textSize="14sp"
         android:layout_marginBottom="16dp" />
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_like"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Like Icon"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,7 +79,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:background="@null"
             android:src="@drawable/ic_send"
             android:contentDescription="Send comment"/>
     </LinearLayout>

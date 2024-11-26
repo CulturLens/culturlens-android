@@ -1,6 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/ivProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/circle_background" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="User21032193821!"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/ivProfile"
+        app:layout_constraintTop_toTopOf="@id/ivProfile"
+        app:layout_constraintBottom_toBottomOf="@id/ivProfile" />
+
+    <RelativeLayout
+        android:id="@+id/rlInputBox"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_share_something"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivProfile">
+
+        <EditText
+            android:id="@+id/etInputText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:background="@android:color/transparent"
+            android:hint="What is on your mind?"
+            android:textColorHint="@color/bittersweet"
+            android:textSize="16sp"
+            android:gravity="top|start" />
+        <ImageView
+            android:id="@+id/ivPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:scaleType="centerCrop" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rlInputBox">
+
+        <TextView
+            android:id="@+id/btnAddImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="add image"
+            android:textColor="@color/bittersweet"
+            android:layout_marginStart="16dp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Post"
+            android:backgroundTint="@color/celadon_blue"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="16dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

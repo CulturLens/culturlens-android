@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culturlens.adapter.ForumAdapter
 import com.example.culturlens.databinding.FragmentHomeBinding
 import com.example.culturlens.model.ForumItem
+import com.example.culturlens.ui.forum.PostForumActivity
 import com.example.culturlens.ui.forum.DetailForumActivity
 
 class HomeFragment : Fragment() {
@@ -19,7 +20,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var forumAdapter: ForumAdapter
-    private val forumList = mutableListOf<ForumItem>() // List yang dapat diubah
+    private val forumList = mutableListOf<ForumItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -28,6 +29,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         setupRecyclerView()
+        setupClickListeners()
 
         return root
     }
@@ -35,10 +37,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Pastikan forumList dibersihkan terlebih dahulu untuk mencegah duplikasi
-        forumList.clear()  // Kosongkan list sebelum memuat data baru
 
-        // dummy data
+        forumList.clear()
+
         loadDummyData()
     }
 
@@ -60,9 +61,14 @@ class HomeFragment : Fragment() {
             adapter = forumAdapter
         }
     }
+    private fun setupClickListeners() {
+        binding.llShareSomething.setOnClickListener {
+            val intent = Intent(requireContext(), PostForumActivity::class.java)
+            startActivity(intent)
+        }
+    }
 
     private fun loadDummyData() {
-        // Data dummy (pastikan data tidak duplikat)
         forumList.addAll(
             listOf(
                 ForumItem("1", "User1", "This is a forum post.", "https://via.placeholder.com/150"),

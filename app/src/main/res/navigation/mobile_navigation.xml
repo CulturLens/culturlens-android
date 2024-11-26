@@ -21,7 +21,21 @@
         android:id="@+id/navigation_camera"
         android:name="com.example.culturlens.ui.camera.CameraFragment"
         android:label="@string/title_camera"
-        tools:layout="@layout/fragment_camera" />
+        tools:layout="@layout/fragment_camera">
+        <action
+            android:id="@+id/action_cameraFragment_to_imageFragment"
+            app:destination="@id/image_fragment">
+            <argument
+                android:name="imageUri"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/image_fragment"
+        android:name="com.example.culturlens.ui.camera.ImageFragment"
+        android:label="ImageFragment"
+        tools:layout="@layout/fragment_image" />
 
     <fragment
         android:id="@+id/navigation_inbox"

@@ -6,17 +6,73 @@
     android:layout_height="match_parent"
     tools:context=".ui.camera.CameraFragment">
 
-    <TextView
-        android:id="@+id/text_camera"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/back"
+        android:src="@drawable/baseline_arrow_back_white"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="16dp" />
+
+    <ImageButton
+        android:id="@+id/btnFlash"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackground"
+        android:contentDescription="@string/flash"
+        android:src="@drawable/baseline_flash_off_24"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp" />
+
+    <ImageButton
+        android:id="@+id/btnShutter"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="528dp"
+        android:background="@drawable/bg_circle"
+        android:contentDescription="@string/shutter"
+        android:src="@drawable/baseline_circle_24"
+        app:layout_constraintEnd_toStartOf="@id/btnSwitchCamera"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/btnGallery"
+        app:layout_constraintTop_toBottomOf="@id/btnBack" />
+
+    <ImageButton
+        android:id="@+id/btnGallery"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="500dp"
+        android:background="@drawable/bg_circle"
+        android:src="@drawable/ic_place_holder"
+        android:contentDescription="@string/gallery"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"/>
+
+    <ImageButton
+        android:id="@+id/btnSwitchCamera"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="500dp"
+        android:background="@drawable/bg_circle"
+        android:contentDescription="@string/switch_camera"
+        android:src="@drawable/ic_switch_camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnFlash" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

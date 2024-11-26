@@ -18,6 +18,7 @@ class SettingPreferencesViewModel(private val pref: SettingPreferences) : ViewMo
 }
 
 class SettingsViewModelFactory(private val pref: SettingPreferences) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SettingPreferencesViewModel::class.java)) {
             return SettingPreferencesViewModel(pref) as T

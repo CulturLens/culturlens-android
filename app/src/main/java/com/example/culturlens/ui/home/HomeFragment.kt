@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culturlens.adapter.ForumAdapter
 import com.example.culturlens.databinding.FragmentHomeBinding
 import com.example.culturlens.model.ForumItem
 import com.example.culturlens.ui.forum.PostForumActivity
 import com.example.culturlens.ui.forum.DetailForumActivity
+import com.example.culturlens.ui.forum.ForumViewModel
 
 class HomeFragment : Fragment() {
 
@@ -21,12 +23,15 @@ class HomeFragment : Fragment() {
 
     private lateinit var forumAdapter: ForumAdapter
     private val forumList = mutableListOf<ForumItem>()
+    private lateinit var forumViewModel: ForumViewModel // Shared ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        forumViewModel = ViewModelProvider(requireActivity())[ForumViewModel::class.java]
 
         setupRecyclerView()
         setupClickListeners()
@@ -37,10 +42,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         forumList.clear()
-
         loadDummyData()
+
+        forumViewModel.forumLikeStatus.observe(viewLifecycleOwner) { likeMap ->
+            forumList.forEach { forumItem ->
+                forumItem.isLiked = likeMap[forumItem.id] ?: false
+            }
+            forumAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -52,15 +62,16 @@ class HomeFragment : Fragment() {
                 startActivity(intent)
             },
             onLikeClick = { forumItem ->
-                Toast.makeText(requireContext(), "Liked: ${forumItem.username}", Toast.LENGTH_SHORT).show()
+                forumViewModel.toggleLikeStatus(forumItem.id)
             }
         )
 
         binding.recyclerViewForum.apply {
-            layoutManager = LinearLayoutManager(requireContext()) // Layout vertikal
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = forumAdapter
         }
     }
+
     private fun setupClickListeners() {
         binding.llShareSomething.setOnClickListener {
             val intent = Intent(requireContext(), PostForumActivity::class.java)
@@ -84,5 +95,6 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+
 
 

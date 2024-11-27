@@ -6,8 +6,21 @@ import androidx.lifecycle.ViewModel
 
 class ForumViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Forum Fragment"
+    private val _forumLikeStatus = MutableLiveData<MutableMap<String, Boolean>>()
+    val forumLikeStatus: LiveData<MutableMap<String, Boolean>> = _forumLikeStatus
+
+    init {
+        _forumLikeStatus.value = mutableMapOf()
     }
-    val text: LiveData<String> = _text
+
+    fun toggleLikeStatus(forumId: String) {
+        _forumLikeStatus.value?.let { likeMap ->
+            likeMap[forumId] = !(likeMap[forumId] ?: false)
+            _forumLikeStatus.value = likeMap
+        }
+    }
+
+    fun getLikeStatus(forumId: String): Boolean {
+        return _forumLikeStatus.value?.get(forumId) ?: false
+    }
 }

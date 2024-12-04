@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search something"
+        android:textSize="16sp"
         android:padding="12dp"
         android:textColorHint="@color/bittersweet"
         android:layout_marginTop="32dp"

@@ -116,7 +116,7 @@
         app:layout_constraintTop_toBottomOf="@id/signinButton" />
 
     <TextView
-        android:id="@+id/loginLinkTextView"
+        android:id="@+id/RegisterLinkTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

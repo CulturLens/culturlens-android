@@ -67,7 +67,7 @@ class ImageFragment : Fragment(R.layout.fragment_image), ImageClassifierHelper.C
 
         // Kirim data ke SuccessResultActivity
         currentImageUri?.let { uri ->
-            val intent = Intent(requireContext(), SuccessResultActivity::class.java).apply {
+            val intent = Intent(requireContext(), ResultActivity::class.java).apply {
                 putExtra("IMAGE_URI", uri.toString())  // Kirim URI gambar
                 putExtra("RESULT_TEXT", resultText)    // Kirim hasil klasifikasi
             }

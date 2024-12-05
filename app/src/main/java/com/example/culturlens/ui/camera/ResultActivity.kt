@@ -4,14 +4,14 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.culturlens.R
-import com.example.culturlens.databinding.ActivitySuccessResultBinding
+import com.example.culturlens.databinding.ActivityResultBinding
 
-class SuccessResultActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySuccessResultBinding
+class ResultActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityResultBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySuccessResultBinding.inflate(layoutInflater)
+        binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val imageUri = intent.getStringExtra("IMAGE_URI")?.let { Uri.parse(it) }

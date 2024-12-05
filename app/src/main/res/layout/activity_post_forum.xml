@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Post"
-            android:backgroundTint="@color/celadon_blue"
+            android:backgroundTint="@color/blue_1"
             android:textColor="@android:color/white"
             android:layout_marginEnd="16dp" />
     </LinearLayout>

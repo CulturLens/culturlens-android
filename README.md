@@ -1,5 +1,5 @@
-# MedFluffy Mobile App
-MedFluffy is a mobile application that can provide predictions of the type of physical illness experienced by cats or dogs just by taking a snap on their external and visible wounds as well as provide recommendations for first aid to cure the disease.
+# CulturLens Mobile App
+CulturLens is a mobile application that can provide predictions of the sacred object on bali just by taking a snap on their external and visible wounds as well as provide descrition about a object and rule of the sacred object.
 
 ## Contributor
 | Name | Bangkit ID | 

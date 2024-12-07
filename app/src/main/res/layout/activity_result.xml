@@ -52,17 +52,55 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_place_holder"
                 android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.SquaredWithRoundedCorners" />
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.SquaredWithRoundedCorners"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/sand_hint"/>
 
             <TextView
                 android:id="@+id/result_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/result"
                 android:textSize="20sp"
-                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/fraunces"
                 android:layout_marginTop="20dp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:background="@drawable/background_gradient"/>
+
+            <TextView
+                android:id="@+id/about"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="About" />
+
+            <TextView
+                android:id="@+id/description_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/description_placeholder" />
+
+            <TextView
+                android:id="@+id/dilarang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/sand_hint"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="Don't !" />
+
+            <TextView
+                android:id="@+id/prohibitions_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="normal"
+                android:text="@string/prohibitions_placeholder" />
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

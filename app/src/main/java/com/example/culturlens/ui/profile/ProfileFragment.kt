@@ -8,18 +8,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.culturlens.R
 import com.example.culturlens.SettingPreferences
 import com.example.culturlens.SettingPreferencesViewModel
 import com.example.culturlens.SettingsViewModelFactory
+import com.example.culturlens.ui.login.UserPreference
 import com.example.culturlens.ui.login.WelcomeActivity
+import com.example.culturlens.ui.login.dataStore
 import com.google.android.material.switchmaterial.SwitchMaterial
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
+
+    private lateinit var tvName: TextView
+    private lateinit var tvUsername: TextView
+
+    private val userPreference: UserPreference by lazy {
+        UserPreference.getInstance(requireContext().dataStore)
+    }
 
     private val viewModel: SettingPreferencesViewModel by viewModels {
         SettingsViewModelFactory(SettingPreferences(requireContext()))
@@ -30,6 +42,12 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        tvName = view.findViewById(R.id.tvName)
+        tvUsername = view.findViewById(R.id.tvUsername)
+
+        loadUserProfile()
+
         val switchTheme = view.findViewById<SwitchMaterial>(R.id.switch_theme)
 
         viewModel.getThemeSetting().observe(viewLifecycleOwner) { isDarkModeActive ->
@@ -54,6 +72,15 @@ class ProfileFragment : Fragment() {
         return view
     }
 
+    private fun loadUserProfile() {
+        lifecycleScope.launch {
+            userPreference.getSession().collect { user ->
+                tvName.text = user.name
+                tvUsername.text = "@${user.username}"
+            }
+        }
+    }
+
     private fun showLogoutConfirmationDialog() {
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Logout")
@@ -76,10 +103,12 @@ class ProfileFragment : Fragment() {
         dialog.show()
     }
 
-        private fun logout() {
-        // Mengarahkan pengguna ke WelcomeActivity
-        val intent = Intent(requireContext(), WelcomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+    private fun logout() {
+        lifecycleScope.launch {
+            userPreference.logout()
+            val intent = Intent(requireContext(), WelcomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
     }
 }

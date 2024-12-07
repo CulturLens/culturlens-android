@@ -17,6 +17,9 @@ import com.example.culturlens.databinding.ActivitySigninBinding
 import com.example.culturlens.model.UserModel
 import com.example.culturlens.ui.login.register.RegisterActivity
 import com.example.culturlens.ui.profile.ViewModelFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SigninActivity : AppCompatActivity() {
 
@@ -59,29 +62,29 @@ class SigninActivity : AppCompatActivity() {
 
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 val request = LoginRequest(email, password)
-                RetrofitClient.instance.login(request).enqueue(object : retrofit2.Callback<ApiResponse> {
-                    override fun onResponse(call: retrofit2.Call<ApiResponse>, response: retrofit2.Response<ApiResponse>) {
+                RetrofitClient.instance.login(request).enqueue(object : Callback<ApiResponse> {
+                    override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                         if (response.isSuccessful) {
-                            val token = response.body()?.token
-                            viewModel.saveSession(UserModel(email, token ?: ""))
-                            AlertDialog.Builder(this@SigninActivity).apply {
-                                setTitle("Yeah!")
-                                setMessage("Anda berhasil login. Ayo mulai gunakan CulturLens")
-                                setPositiveButton("Lanjut") { _, _ ->
-                                    val intent = Intent(this@SigninActivity, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                                    startActivity(intent)
-                                    finish()
-                                }
-                                create()
-                                show()
+                            val userDetails = response.body()
+                            if (userDetails != null) {
+                                viewModel.saveSession(
+                                    UserModel(
+                                        userId = userDetails.userId,
+                                        email = userDetails.email,
+                                        name = userDetails.name,
+                                        username = userDetails.username
+                                    )
+                                )
+                                navigateToMain()
+                            } else {
+                                showError("Login gagal. Data pengguna tidak valid.")
                             }
                         } else {
                             showError("Login gagal. Cek email dan password.")
                         }
                     }
 
-                    override fun onFailure(call: retrofit2.Call<ApiResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
                         showError("Error: ${t.message}")
                     }
                 })
@@ -91,8 +94,22 @@ class SigninActivity : AppCompatActivity() {
         }
     }
 
+    private fun navigateToMain() {
+        AlertDialog.Builder(this@SigninActivity).apply {
+            setTitle("Yeah!")
+            setMessage("Anda berhasil login. Ayo mulai gunakan aplikasi.")
+            setPositiveButton("Lanjut") { _, _ ->
+                val intent = Intent(this@SigninActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            }
+            create()
+            show()
+        }
+    }
+
     private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
 }

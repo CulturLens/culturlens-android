@@ -50,4 +50,8 @@
     <string name="result">Result</string>
     <string name="retry">Retry</string>
 
+    <string name="description_placeholder">Description will appear here.</string>
+    <string name="prohibitions_placeholder">Prohibitions will appear here.</string>
+    <string name="description_not_found">Description not available for this item.</string>
+    <string name="prohibitions_not_found">No prohibitions found for this item.</string>
 </resources>

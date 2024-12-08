@@ -18,9 +18,9 @@ import com.example.culturlens.R
 import com.example.culturlens.SettingPreferences
 import com.example.culturlens.SettingPreferencesViewModel
 import com.example.culturlens.SettingsViewModelFactory
-import com.example.culturlens.ui.login.UserPreference
+import com.example.culturlens.pref.UserPreference
 import com.example.culturlens.ui.login.WelcomeActivity
-import com.example.culturlens.ui.login.dataStore
+import com.example.culturlens.ui.dataStore
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.launch
 
@@ -106,9 +106,14 @@ class ProfileFragment : Fragment() {
     private fun logout() {
         lifecycleScope.launch {
             userPreference.logout()
-            val intent = Intent(requireContext(), WelcomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            navigateToLogin()
         }
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(requireContext(), WelcomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

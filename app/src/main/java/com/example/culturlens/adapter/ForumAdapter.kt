@@ -9,7 +9,7 @@ import com.example.culturlens.databinding.ItemForumBinding
 import com.example.culturlens.model.ForumItem
 
 class ForumAdapter(
-    var forumList: List<ForumItem>,
+    private val forumList: List<ForumItem>,
     private val onItemClick: (ForumItem) -> Unit,
     private val onLikeClick: (ForumItem) -> Unit
 ) : RecyclerView.Adapter<ForumAdapter.ForumViewHolder>() {
@@ -27,22 +27,23 @@ class ForumAdapter(
     override fun getItemCount(): Int = forumList.size
 
     inner class ForumViewHolder(private val binding: ItemForumBinding) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(forumItem: ForumItem) {
             binding.tvUsername.text = forumItem.username
-            binding.tvPostContent.text = forumItem.content
-            Glide.with(binding.ivPostImage.context).load(forumItem.imageUrl).into(binding.ivPostImage)
-
+            binding.tvDescription.text = forumItem.description
             binding.ivLike.setImageResource(
                 if (forumItem.isLiked) R.drawable.ic_like_fill else R.drawable.ic_like
             )
 
-            binding.ivLike.setOnClickListener {
-                onLikeClick(forumItem)
-            }
-
             binding.root.setOnClickListener {
                 onItemClick(forumItem)
+            }
+
+            binding.ivLike.setOnClickListener {
+                onLikeClick(forumItem)
             }
         }
     }
 }
+
+

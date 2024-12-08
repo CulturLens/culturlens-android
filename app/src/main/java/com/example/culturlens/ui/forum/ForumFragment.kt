@@ -35,9 +35,8 @@ class ForumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        setupSearchBar()
+//        setupSearchBar()
 
-        loadDummyData()
     }
 
     private fun setupRecyclerView() {
@@ -58,36 +57,26 @@ class ForumFragment : Fragment() {
         }
     }
 
-    private fun setupSearchBar() {
-        binding.etSearchForum.addTextChangedListener { text ->
-            val query = text.toString().trim()
-            filterForums(query)
-        }
-    }
+//    private fun setupSearchBar() {
+//        binding.etSearchForum.addTextChangedListener { text ->
+//            val query = text.toString().trim()
+//            filterForums(query)
+//        }
+//    }
 
-    private fun filterForums(query: String) {
-        filteredForumList.clear()
-        if (query.isEmpty()) {
-            filteredForumList.addAll(forumList)
-        } else {
-            filteredForumList.addAll(
-                forumList.filter { it.content.contains(query, ignoreCase = true) }
-            )
-        }
-        forumAdapter.notifyDataSetChanged()
-    }
+//    private fun filterForums(query: String) {
+//        filteredForumList.clear()
+//        if (query.isEmpty()) {
+//            filteredForumList.addAll(forumList)
+//        } else {
+//            filteredForumList.addAll(
+//                forumList.filter { it.content.contains(query, ignoreCase = true) }
+//            )
+//        }
+//        forumAdapter.notifyDataSetChanged()
+//    }
 
-    private fun loadDummyData() {
-        forumList.addAll(
-            listOf(
-                ForumItem("1", "User1", "This is a forum post.", "https://via.placeholder.com/150"),
-                ForumItem("2", "User2", "Another interesting post.", "https://via.placeholder.com/150"),
-                ForumItem("3", "User3", "A beautiful picture of nature.", "https://via.placeholder.com/150")
-            )
-        )
-        filteredForumList.addAll(forumList)
-        forumAdapter.notifyDataSetChanged()
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -8,13 +8,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culturlens.adapter.ForumAdapter
+import com.example.culturlens.api.ApiClient
 import com.example.culturlens.databinding.FragmentHomeBinding
 import com.example.culturlens.model.ForumItem
+import com.example.culturlens.pref.UserPreference
+import com.example.culturlens.ui.dataStore
 import com.example.culturlens.ui.forum.PostForumActivity
 import com.example.culturlens.ui.forum.DetailForumActivity
 import com.example.culturlens.ui.forum.ForumViewModel
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment : Fragment() {
 
@@ -23,7 +31,11 @@ class HomeFragment : Fragment() {
 
     private lateinit var forumAdapter: ForumAdapter
     private val forumList = mutableListOf<ForumItem>()
-    private lateinit var forumViewModel: ForumViewModel // Shared ViewModel
+    private lateinit var forumViewModel: ForumViewModel
+
+    private val userPreference: UserPreference by lazy {
+        UserPreference.getInstance(requireContext().dataStore)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -42,14 +54,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadUserSession()
         forumList.clear()
-        loadDummyData()
+        fetchForums()
 
         forumViewModel.forumLikeStatus.observe(viewLifecycleOwner) { likeMap ->
             forumList.forEach { forumItem ->
                 forumItem.isLiked = likeMap[forumItem.id] ?: false
             }
             forumAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun loadUserSession() {
+        lifecycleScope.launch {
+            userPreference.getSession().collect { user ->
+                if (user.isLogin) {
+                    binding.tvUsername.text = "Hello, ${user.name}"
+                } else {
+                    binding.tvUsername.text = "Guest"
+                }
+            }
         }
     }
 
@@ -79,15 +104,26 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun loadDummyData() {
-        forumList.addAll(
-            listOf(
-                ForumItem("1", "User1", "This is a forum post.", "https://via.placeholder.com/150"),
-                ForumItem("2", "User2", "Another interesting post.", "https://via.placeholder.com/150"),
-                ForumItem("3", "User3", "A beautiful picture of nature.", "https://via.placeholder.com/150")
-            )
-        )
-        forumAdapter.notifyDataSetChanged()
+    private fun fetchForums() {
+        val apiService = ApiClient.instance
+        apiService.getForums().enqueue(object : Callback<List<ForumItem>> {
+            override fun onResponse(call: Call<List<ForumItem>>, response: Response<List<ForumItem>>) {
+                if (response.isSuccessful) {
+                    val forums = response.body()
+                    if (forums != null) {
+                        forumList.clear()
+                        forumList.addAll(forums)
+                        forumAdapter.notifyDataSetChanged()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to load forums", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<ForumItem>>, t: Throwable) {
+                Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -95,6 +131,4 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
-
-
 

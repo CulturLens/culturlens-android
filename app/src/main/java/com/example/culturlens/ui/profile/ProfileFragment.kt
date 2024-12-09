@@ -3,6 +3,7 @@ package com.example.culturlens.ui.profile
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,16 +105,28 @@ class ProfileFragment : Fragment() {
     }
 
     private fun logout() {
+        Log.d("ProfileFragment", "Logging out")
         lifecycleScope.launch {
-            userPreference.logout()
-            navigateToLogin()
+            try {
+                userPreference.logout()
+                Log.d("ProfileFragment", "Logout successful")
+                navigateToLogin()
+            } catch (e: Exception) {
+                Log.e("ProfileFragment", "Logout failed: ${e.message}")
+            }
         }
     }
 
     private fun navigateToLogin() {
-        val intent = Intent(requireContext(), WelcomeActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
-        requireActivity().finish()
+        Log.d("ProfileFragment", "Navigating to login")
+        try {
+            val intent = Intent(requireContext(), WelcomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            requireActivity().finish()
+        } catch (e: Exception) {
+            Log.e("ProfileFragment", "Navigation failed: ${e.message}")
+        }
     }
+
 }

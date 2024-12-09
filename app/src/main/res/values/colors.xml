@@ -14,6 +14,7 @@
     <color name="bittersweet">#F07167</color>
     <color name="sand_hint">#BA443C</color>
     <color name="grey">#998F8F</color>
+    <color name="grey1">#EFEFEF</color>
 
     <color name="inactive_blue">#68E7EF</color>
 </resources>

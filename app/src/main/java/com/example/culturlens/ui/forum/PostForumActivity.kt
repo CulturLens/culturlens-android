@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -62,8 +63,23 @@ class PostForumActivity : AppCompatActivity() {
         btnAddImage = findViewById(R.id.btnAddImage)
         btnCamera = findViewById(R.id.btnCamera)
         ivPreview = findViewById(R.id.ivPreview)
+        etTitle = findViewById(R.id.etInputText)
         tvDescription = findViewById(R.id.etInputText)
         btnPost = findViewById(R.id.btnPost)
+
+        val tvUsername: TextView = findViewById(R.id.tvUsername)
+
+        lifecycleScope.launch {
+            userRepository.getSession().collect { user ->
+                val username = user.username
+                if (!username.isNullOrEmpty()) {
+                    tvUsername.text = username
+                } else {
+                    tvUsername.text = "Username tidak ditemukan"
+                    Log.e("PostForumActivity", "Username tidak ditemukan dalam sesi.")
+                }
+            }
+        }
 
         btnAddImage.setOnClickListener {
             openGallery()
@@ -95,6 +111,7 @@ class PostForumActivity : AppCompatActivity() {
             postToForumApi(title, description, selectedPhotoUri!!)
         }
     }
+
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -130,16 +147,21 @@ class PostForumActivity : AppCompatActivity() {
                 REQUEST_IMAGE_PICK -> {
                     val imageUri: Uri? = data?.data
                     if (imageUri != null) {
+                        Log.d("PostForumActivity", "Selected image URI: $imageUri")
                         displayImage(imageUri)
+                    } else {
+                        Log.e("PostForumActivity", "Image URI is null")
                     }
                 }
                 REQUEST_IMAGE_CAPTURE -> {
                     val photoUri = Uri.fromFile(photoFile)
+                    Log.d("PostForumActivity", "Captured image URI: $photoUri")
                     displayImage(photoUri)
                 }
             }
         }
     }
+
 
     private fun displayImage(imageUri: Uri) {
         ivPreview.setImageURI(imageUri)
@@ -151,14 +173,29 @@ class PostForumActivity : AppCompatActivity() {
         lifecycleScope.launch {
             userRepository.getSession().collect { user ->
                 val token = "Bearer ${user.token}"
+                val username = user.username
+                Log.d("PostForumActivity", "Token: $token")
+                Log.d("PostForumActivity", "Username: $username")
+
+                if (username.isNullOrEmpty()) {
+                    Log.e("PostForumActivity", "Username is missing!")
+                    Toast.makeText(this@PostForumActivity, "Username tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                    return@collect
+                }
 
                 val file = FileUtils.getFileFromUri(this@PostForumActivity, photoUri)
+                if (!file.exists()) {
+                    Log.e("PostForumActivity", "File not found!")
+                    Toast.makeText(this@PostForumActivity, "File gambar tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                    return@collect
+                }
+
                 val requestBodyPhoto = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                 val photoMultipart = MultipartBody.Part.createFormData("image", file.name, requestBodyPhoto)
 
                 val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
                 val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
-                val usernameBody = user.username.toRequestBody("text/plain".toMediaTypeOrNull())
+                val usernameBody = username.toRequestBody("text/plain".toMediaTypeOrNull())
 
                 ApiClient.instance.createPost(token, titleBody, descriptionBody, usernameBody, photoMultipart)
                     .enqueue(object : Callback<GenericResponse> {
@@ -166,17 +203,19 @@ class PostForumActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 Toast.makeText(this@PostForumActivity, "Forum berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
 
-                                // Redirect to ForumFragment
                                 val intent = Intent(this@PostForumActivity, MainActivity::class.java)
                                 intent.putExtra("fragment", "ForumFragment")
                                 startActivity(intent)
                                 finish()
                             } else {
-                                Toast.makeText(this@PostForumActivity, "Gagal menambahkan forum!", Toast.LENGTH_SHORT).show()
+                                val errorBody = response.errorBody()?.string()
+                                Log.e("PostForumActivity", "Error response: $errorBody")
+                                Toast.makeText(this@PostForumActivity, "Gagal menambahkan forum! $errorBody", Toast.LENGTH_LONG).show()
                             }
                         }
 
                         override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
+                            Log.e("PostForumActivity", "Request failed: ${t.message}")
                             Toast.makeText(this@PostForumActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
                         }
                     })
@@ -184,11 +223,14 @@ class PostForumActivity : AppCompatActivity() {
         }
     }
 
+
+
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
         private const val REQUEST_IMAGE_CAPTURE = 2
     }
 }
+
 
 
 

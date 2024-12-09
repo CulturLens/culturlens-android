@@ -2,6 +2,7 @@ package com.example.culturlens.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +21,12 @@ import com.example.culturlens.ui.forum.PostForumActivity
 import com.example.culturlens.ui.forum.DetailForumActivity
 import com.example.culturlens.ui.forum.ForumViewModel
 import com.example.culturlens.ui.login.signin.SigninActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 
 class HomeFragment : Fragment() {
@@ -60,22 +64,40 @@ class HomeFragment : Fragment() {
             forumList.forEach { forumItem ->
                 forumItem.isLiked = likeMap[forumItem.id] ?: false
             }
-            forumAdapter.submitList(forumList) // Update list di adapter
+            forumAdapter.submitList(forumList)
         }
     }
 
     private fun loadUserSession() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             userPreference.getSession().collect { user ->
-                if (user.isLogin) {
-                    binding.tvUsername.text = "Hello, ${user.name}"
-                } else {
-                    binding.tvUsername.text = "Guest"
-                    redirectToLogin()
+                if (_binding != null && isAdded) {
+                    if (user.isLogin) {
+                        try {
+                            val userResponse = ApiClient.instance.getUserById(user.userId)
+                            binding.tvUsername.text = "Hello, ${userResponse.name}"
+                        } catch (e: HttpException) {
+                            Log.e("HomeFragment", "HTTP Error: ${e.message()}, Code: ${e.code()}")
+                            if (e.code() == 404) {
+                                Log.e("HomeFragment", "User not found: HTTP 404")
+                                binding.tvUsername.text = "Hello, Guest"
+                            }
+                        } catch (e: Exception) {
+                            Log.e("HomeFragment", "Error fetching user: ${e.message}")
+                            binding.tvUsername.text = "Hello, Guest"
+                        }
+                    } else {
+                        binding.tvUsername.text = "Guest"
+                        redirectToLogin()
+                    }
                 }
             }
         }
     }
+
+
+
+
 
     private fun redirectToLogin() {
         val intent = Intent(requireContext(), SigninActivity::class.java)
@@ -111,28 +133,35 @@ class HomeFragment : Fragment() {
 
     private fun fetchForums() {
         binding.progressBar.visibility = View.VISIBLE
+        Log.d("HomeFragment", "Fetching forums...")
 
         val apiService = ApiClient.instance
         apiService.getForums().enqueue(object : Callback<List<ForumItem>> {
             override fun onResponse(call: Call<List<ForumItem>>, response: Response<List<ForumItem>>) {
                 binding.progressBar.visibility = View.GONE
+                Log.d("HomeFragment", "Forum response: ${response.body()}")
+
                 if (response.isSuccessful) {
                     response.body()?.let { forums ->
                         forumList.clear()
                         forumList.addAll(forums)
                         forumAdapter.submitList(forumList)
+                        Log.d("HomeFragment", "Forums loaded: ${forumList.size}")
                     }
                 } else {
+                    Log.e("HomeFragment", "Failed to load forums: ${response.message()}")
                     Toast.makeText(requireContext(), "Failed to load forums", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<ForumItem>>, t: Throwable) {
                 binding.progressBar.visibility = View.GONE
+                Log.e("HomeFragment", "Network Error: ${t.message}")
                 Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

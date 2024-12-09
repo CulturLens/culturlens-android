@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- ScrollView to allow scrolling when content overflows -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -17,7 +16,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- User Profile Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,17 +39,15 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- Image Preview (ivPreview) -->
             <ImageView
                 android:id="@+id/ivPreview"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="16dp"
-                android:background="@color/sand_hint"
+                android:background="@color/grey1"
                 android:scaleType="centerCrop" />
 
-            <!-- Input Box with Buttons -->
             <LinearLayout
                 android:id="@+id/rlInputBox"
                 android:layout_width="match_parent"
@@ -60,7 +56,6 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_share_something">
 
-                <!-- Button Row -->
                 <LinearLayout
                     android:id="@+id/linearButtons"
                     android:layout_width="match_parent"
@@ -92,7 +87,6 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- EditText -->
                 <EditText
                     android:id="@+id/etInputText"
                     android:layout_width="match_parent"
@@ -108,7 +102,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Post Button -->
     <Button
         android:id="@+id/btnPost"
         android:layout_width="0dp"

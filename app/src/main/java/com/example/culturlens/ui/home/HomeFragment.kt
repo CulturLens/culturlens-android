@@ -19,6 +19,7 @@ import com.example.culturlens.ui.dataStore
 import com.example.culturlens.ui.forum.PostForumActivity
 import com.example.culturlens.ui.forum.DetailForumActivity
 import com.example.culturlens.ui.forum.ForumViewModel
+import com.example.culturlens.ui.login.signin.SigninActivity
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,30 +40,27 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-
-        forumViewModel = ViewModelProvider(requireActivity())[ForumViewModel::class.java]
-
-        setupRecyclerView()
-        setupClickListeners()
-
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        forumViewModel = ViewModelProvider(requireActivity())[ForumViewModel::class.java]
+
+        setupRecyclerView()
+        setupClickListeners()
         loadUserSession()
-        forumList.clear()
+
         fetchForums()
 
         forumViewModel.forumLikeStatus.observe(viewLifecycleOwner) { likeMap ->
             forumList.forEach { forumItem ->
                 forumItem.isLiked = likeMap[forumItem.id] ?: false
             }
-            forumAdapter.notifyDataSetChanged()
+            forumAdapter.submitList(forumList) // Update list di adapter
         }
     }
 
@@ -73,9 +71,16 @@ class HomeFragment : Fragment() {
                     binding.tvUsername.text = "Hello, ${user.name}"
                 } else {
                     binding.tvUsername.text = "Guest"
+                    redirectToLogin()
                 }
             }
         }
+    }
+
+    private fun redirectToLogin() {
+        val intent = Intent(requireContext(), SigninActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     private fun setupRecyclerView() {
@@ -105,15 +110,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchForums() {
+        binding.progressBar.visibility = View.VISIBLE
+
         val apiService = ApiClient.instance
         apiService.getForums().enqueue(object : Callback<List<ForumItem>> {
             override fun onResponse(call: Call<List<ForumItem>>, response: Response<List<ForumItem>>) {
+                binding.progressBar.visibility = View.GONE
                 if (response.isSuccessful) {
-                    val forums = response.body()
-                    if (forums != null) {
+                    response.body()?.let { forums ->
                         forumList.clear()
                         forumList.addAll(forums)
-                        forumAdapter.notifyDataSetChanged()
+                        forumAdapter.submitList(forumList)
                     }
                 } else {
                     Toast.makeText(requireContext(), "Failed to load forums", Toast.LENGTH_SHORT).show()
@@ -121,6 +128,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<ForumItem>>, t: Throwable) {
+                binding.progressBar.visibility = View.GONE
                 Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -131,4 +139,6 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 }
+
+
 

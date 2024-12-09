@@ -59,7 +59,6 @@ class PostForumActivity : AppCompatActivity() {
         }
         userRepository = UserRepository.getInstance(UserPreference.getInstance(dataStore))
 
-        // Bind views
         btnAddImage = findViewById(R.id.btnAddImage)
         btnCamera = findViewById(R.id.btnCamera)
         ivPreview = findViewById(R.id.ivPreview)
@@ -74,12 +73,10 @@ class PostForumActivity : AppCompatActivity() {
             openCamera()
         }
 
-        // Handle "Post" button
         btnPost.setOnClickListener {
             val title = etTitle.text.toString().trim()
             val description = tvDescription.text.toString().trim()
 
-            // Validate inputs
             if (title.isEmpty()) {
                 Toast.makeText(this, "Judul tidak boleh kosong!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -95,7 +92,6 @@ class PostForumActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Post to API
             postToForumApi(title, description, selectedPhotoUri!!)
         }
     }
@@ -156,17 +152,14 @@ class PostForumActivity : AppCompatActivity() {
             userRepository.getSession().collect { user ->
                 val token = "Bearer ${user.token}"
 
-                // Convert URI to File
                 val file = FileUtils.getFileFromUri(this@PostForumActivity, photoUri)
                 val requestBodyPhoto = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                 val photoMultipart = MultipartBody.Part.createFormData("image", file.name, requestBodyPhoto)
 
-                // Create RequestBody for title, description, and username
                 val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
                 val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
                 val usernameBody = user.username.toRequestBody("text/plain".toMediaTypeOrNull())
 
-                // Call API
                 ApiClient.instance.createPost(token, titleBody, descriptionBody, usernameBody, photoMultipart)
                     .enqueue(object : Callback<GenericResponse> {
                         override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {

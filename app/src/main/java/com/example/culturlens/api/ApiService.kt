@@ -4,7 +4,6 @@ import com.example.culturlens.model.ForumItem
 import com.example.culturlens.response.GenericResponse
 import com.example.culturlens.response.LoginRequest
 import com.example.culturlens.response.LoginResponse
-import com.example.culturlens.response.PostRequest
 import com.example.culturlens.response.RegisterRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -15,6 +14,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiService {
     @POST("register")
@@ -30,6 +30,12 @@ interface ApiService {
     @GET("forums")
     fun getForums(
     ): Call<List<ForumItem>>
+
+    @GET("forum/{id}")
+    fun getForumDetail(
+        @Path("id") id: String
+    ): Call<ForumItem>
+
 
     @Multipart
     @POST("forum")

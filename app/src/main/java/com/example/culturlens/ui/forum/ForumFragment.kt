@@ -6,14 +6,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culturlens.adapter.ForumAdapter
+import com.example.culturlens.api.ApiClient
 import com.example.culturlens.databinding.FragmentForumBinding
 import com.example.culturlens.model.ForumItem
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ForumFragment : Fragment() {
 
@@ -35,8 +40,8 @@ class ForumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-//        setupSearchBar()
-
+        setupSearchBar()
+        fetchForums()
     }
 
     private fun setupRecyclerView() {
@@ -57,29 +62,61 @@ class ForumFragment : Fragment() {
         }
     }
 
-//    private fun setupSearchBar() {
-//        binding.etSearchForum.addTextChangedListener { text ->
-//            val query = text.toString().trim()
-//            filterForums(query)
-//        }
-//    }
+    private fun setupSearchBar() {
+        binding.etSearchForum.addTextChangedListener { text ->
+            val query = text.toString().trim()
+            filterForums(query)
+        }
+    }
 
-//    private fun filterForums(query: String) {
-//        filteredForumList.clear()
-//        if (query.isEmpty()) {
-//            filteredForumList.addAll(forumList)
-//        } else {
-//            filteredForumList.addAll(
-//                forumList.filter { it.content.contains(query, ignoreCase = true) }
-//            )
-//        }
-//        forumAdapter.notifyDataSetChanged()
-//    }
+    private fun filterForums(query: String) {
+        filteredForumList.clear()
+        if (query.isEmpty()) {
+            filteredForumList.addAll(forumList)
+        } else {
+            filteredForumList.addAll(
+                forumList.filter {
+                    it.title.contains(query, ignoreCase = true) ||
+                            it.description.contains(query, ignoreCase = true)
+                }
+            )
+        }
+        forumAdapter.notifyDataSetChanged()
+    }
 
+    private fun fetchForums() {
+        binding.progressBar.visibility = View.VISIBLE
 
+        val apiService = ApiClient.instance
+        apiService.getForums().enqueue(object : Callback<List<ForumItem>> {
+            override fun onResponse(call: Call<List<ForumItem>>, response: Response<List<ForumItem>>) {
+                binding.progressBar.visibility = View.GONE
+                if (response.isSuccessful) {
+                    val forums = response.body()
+                    if (forums != null) {
+                        forumList.clear()
+                        forumList.addAll(forums)
+
+                        filteredForumList.clear()
+                        filteredForumList.addAll(forumList)
+
+                        forumAdapter.notifyDataSetChanged()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to load forums", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<ForumItem>>, t: Throwable) {
+                binding.progressBar.visibility = View.GONE
+                Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+

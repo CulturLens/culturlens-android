@@ -14,9 +14,8 @@ class ForumViewModel : ViewModel() {
     }
 
     fun toggleLikeStatus(forumId: String) {
-        _forumLikeStatus.value?.let { likeMap ->
-            likeMap[forumId] = !(likeMap[forumId] ?: false)
-            _forumLikeStatus.value = likeMap
+        _forumLikeStatus.value = _forumLikeStatus.value?.apply {
+            this[forumId] = !(this[forumId] ?: false)
         }
     }
 
@@ -24,3 +23,4 @@ class ForumViewModel : ViewModel() {
         return _forumLikeStatus.value?.get(forumId) ?: false
     }
 }
+

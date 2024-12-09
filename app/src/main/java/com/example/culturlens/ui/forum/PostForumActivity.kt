@@ -40,7 +40,8 @@ class PostForumActivity : AppCompatActivity() {
     private lateinit var btnAddImage: TextView
     private lateinit var btnCamera: Button
     private lateinit var ivPreview: ImageView
-    private lateinit var tvPlaceholder: EditText
+    private lateinit var etTitle: EditText
+    private lateinit var tvDescription: EditText
     private lateinit var btnPost: Button
 
     private lateinit var photoFile: File
@@ -58,10 +59,11 @@ class PostForumActivity : AppCompatActivity() {
         }
         userRepository = UserRepository.getInstance(UserPreference.getInstance(dataStore))
 
+        // Bind views
         btnAddImage = findViewById(R.id.btnAddImage)
         btnCamera = findViewById(R.id.btnCamera)
         ivPreview = findViewById(R.id.ivPreview)
-        tvPlaceholder = findViewById(R.id.etInputText)
+        tvDescription = findViewById(R.id.etInputText)
         btnPost = findViewById(R.id.btnPost)
 
         btnAddImage.setOnClickListener {
@@ -72,20 +74,29 @@ class PostForumActivity : AppCompatActivity() {
             openCamera()
         }
 
+        // Handle "Post" button
         btnPost.setOnClickListener {
-            val content = tvPlaceholder.text.toString()
+            val title = etTitle.text.toString().trim()
+            val description = tvDescription.text.toString().trim()
 
-            if (content.isEmpty()) {
-                Toast.makeText(this, "Teks cerita tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+            // Validate inputs
+            if (title.isEmpty()) {
+                Toast.makeText(this, "Judul tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (description.isEmpty()) {
+                Toast.makeText(this, "Deskripsi tidak boleh kosong!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (selectedPhotoUri == null) {
-                Toast.makeText(this, "Tambahkan gambar untuk cerita!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Tambahkan gambar untuk forum!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            postToForumApi(content, selectedPhotoUri!!)
+            // Post to API
+            postToForumApi(title, description, selectedPhotoUri!!)
         }
     }
 
@@ -137,50 +148,55 @@ class PostForumActivity : AppCompatActivity() {
     private fun displayImage(imageUri: Uri) {
         ivPreview.setImageURI(imageUri)
         ivPreview.visibility = ImageView.VISIBLE
-        tvPlaceholder.visibility = EditText.INVISIBLE
         selectedPhotoUri = imageUri
     }
 
-
-    private fun postToForumApi(content: String, photoUri: Uri) {
+    private fun postToForumApi(title: String, description: String, photoUri: Uri) {
         lifecycleScope.launch {
             userRepository.getSession().collect { user ->
                 val token = "Bearer ${user.token}"
+
+                // Convert URI to File
                 val file = FileUtils.getFileFromUri(this@PostForumActivity, photoUri)
                 val requestBodyPhoto = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                val photoMultipart = MultipartBody.Part.createFormData("photo", file.name, requestBodyPhoto)
+                val photoMultipart = MultipartBody.Part.createFormData("image", file.name, requestBodyPhoto)
 
-                val descriptionBody = content.toRequestBody("text/plain".toMediaTypeOrNull())
+                // Create RequestBody for title, description, and username
+                val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
+                val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
+                val usernameBody = user.username.toRequestBody("text/plain".toMediaTypeOrNull())
 
-                ApiClient.instance.createPost(token, photoMultipart, descriptionBody).enqueue(object :
-                    Callback<GenericResponse> {
-                    override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
-                        if (response.isSuccessful) {
-                            Toast.makeText(this@PostForumActivity, "Cerita berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
+                // Call API
+                ApiClient.instance.createPost(token, titleBody, descriptionBody, usernameBody, photoMultipart)
+                    .enqueue(object : Callback<GenericResponse> {
+                        override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
+                            if (response.isSuccessful) {
+                                Toast.makeText(this@PostForumActivity, "Forum berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
 
-                            val intent = Intent(this@PostForumActivity, MainActivity::class.java)
-                            intent.putExtra("fragment", "ForumFragment")
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            Toast.makeText(this@PostForumActivity, "Gagal menambahkan cerita!", Toast.LENGTH_SHORT).show()
+                                // Redirect to ForumFragment
+                                val intent = Intent(this@PostForumActivity, MainActivity::class.java)
+                                intent.putExtra("fragment", "ForumFragment")
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                Toast.makeText(this@PostForumActivity, "Gagal menambahkan forum!", Toast.LENGTH_SHORT).show()
+                            }
                         }
-                    }
 
-                    override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
-                        Toast.makeText(this@PostForumActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                        override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
+                            Toast.makeText(this@PostForumActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    })
             }
         }
     }
-
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
         private const val REQUEST_IMAGE_CAPTURE = 2
     }
 }
+
 
 
 

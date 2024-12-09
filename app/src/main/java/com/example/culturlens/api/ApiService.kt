@@ -35,8 +35,10 @@ interface ApiService {
     @POST("forum")
     fun createPost(
         @Header("Authorization") token: String,
-        @Part photo: MultipartBody.Part,
-        @Part("content") description: RequestBody
+        @Part("title") title: RequestBody,
+        @Part("description") description: RequestBody,
+        @Part("username") username: RequestBody,
+        @Part image: MultipartBody.Part
     ): Call<GenericResponse>
 
 }

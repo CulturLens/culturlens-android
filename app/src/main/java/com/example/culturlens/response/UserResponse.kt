@@ -5,6 +5,6 @@ data class UserResponse(
     val name: String,
     val email: String,
     val username: String,
-    val profilePhoto: String,
+    val profilePhotoUrl: String,
     val phone: String
 )

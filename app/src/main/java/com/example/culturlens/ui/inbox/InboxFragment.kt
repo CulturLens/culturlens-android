@@ -11,9 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.culturlens.adapter.NotificationAdapter
 import com.example.culturlens.api.ApiClient
-import com.example.culturlens.model.NotificationItem
 import com.example.culturlens.pref.UserRepository
 import com.example.culturlens.databinding.FragmentInboxBinding
+import com.example.culturlens.model.NotificationItem
 import com.example.culturlens.pref.UserPreference
 import com.example.culturlens.ui.dataStore
 import kotlinx.coroutines.flow.first
@@ -27,7 +27,7 @@ class InboxFragment : Fragment() {
     private var _binding: FragmentInboxBinding? = null
     private val binding get() = _binding!!
 
-    private val notificationAdapter = NotificationAdapter(emptyList())
+    private lateinit var notificationAdapter: NotificationAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,12 +36,18 @@ class InboxFragment : Fragment() {
         _binding = FragmentInboxBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        notificationAdapter = NotificationAdapter(emptyList())
+
         binding.rvNew.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvNew.adapter = notificationAdapter
+        binding.rvNew.adapter = notificationAdapter  // Set the adapter here
 
         getNotifications()
-
-        return root
     }
 
     private fun getNotifications() {
@@ -58,18 +64,27 @@ class InboxFragment : Fragment() {
                 return@launch
             }
 
-            fetchNotifications(token)
+            fetchNotifications(token, userSession.userId)
         }
     }
 
-    private fun fetchNotifications(token: String) {
+    private fun fetchNotifications(token: String, loggedInUserId: Int) {
         val call = ApiClient.instance.getNotifications(token)
 
-        call.enqueue(object : Callback<List<NotificationItem>> { // Gunakan List<NotificationItem>
+        call.enqueue(object : Callback<List<NotificationItem>> {
             override fun onResponse(call: Call<List<NotificationItem>>, response: Response<List<NotificationItem>>) {
                 if (response.isSuccessful) {
                     val notifications = response.body() ?: emptyList()
-                    notificationAdapter.updateData(notifications)
+
+                    Log.d("InboxFragment", "Notifications: $notifications")
+
+                    val filteredNotifications = notifications.filter {
+                        it.userId == loggedInUserId && it.userId != 0
+                    }
+
+                    Log.d("InboxFragment", "Filtered Notifications: $filteredNotifications")
+
+                    notificationAdapter.updateData(filteredNotifications)
                 } else {
                     Log.e("API_ERROR", "Error: ${response.code()} - ${response.message()}")
                     Toast.makeText(context, "Gagal mengambil notifikasi", Toast.LENGTH_SHORT).show()
@@ -82,6 +97,8 @@ class InboxFragment : Fragment() {
             }
         })
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

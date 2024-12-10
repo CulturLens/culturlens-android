@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -39,38 +39,6 @@
                 android:paddingBottom="20dp"
                 android:scrollbars="none" />
 
-            <TextView
-                android:id="@+id/thisWeekTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/this_week"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvThisWeek"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingBottom="20dp"
-                android:scrollbars="none" />
-
-            <TextView
-                android:id="@+id/OlderTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/older"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvOlder"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:paddingBottom="20dp"
-                android:scrollbars="none" />
-
-        </LinearLayout>
+        </GridLayout>
     </ScrollView>
 </LinearLayout>

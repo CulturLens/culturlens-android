@@ -17,21 +17,30 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.culturlens.R
 import com.example.culturlens.SettingPreferences
 import com.example.culturlens.SettingPreferencesViewModel
 import com.example.culturlens.SettingsViewModelFactory
+import com.example.culturlens.api.ApiClient
+import com.example.culturlens.api.ApiService
 import com.example.culturlens.pref.UserPreference
+import com.example.culturlens.response.UserResponse
 import com.example.culturlens.ui.login.WelcomeActivity
 import com.example.culturlens.ui.dataStore
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Locale
 
 class ProfileFragment : Fragment() {
 
     private lateinit var tvName: TextView
     private lateinit var tvUsername: TextView
+    private lateinit var ivProfilePicture: ShapeableImageView
     private lateinit var btnChangeLanguage: ImageButton
 
     private val userPreference: UserPreference by lazy {
@@ -42,6 +51,10 @@ class ProfileFragment : Fragment() {
         SettingsViewModelFactory(SettingPreferences(requireContext()))
     }
 
+    private val apiService: ApiService by lazy {
+        ApiClient.instance // Memastikan ApiClient sudah ada
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,6 +63,7 @@ class ProfileFragment : Fragment() {
 
         tvName = view.findViewById(R.id.tvName)
         tvUsername = view.findViewById(R.id.tvUsername)
+        ivProfilePicture = view.findViewById(R.id.ivProfilePicture)
         btnChangeLanguage = view.findViewById(R.id.btnChangeLanguage)
 
         loadUserProfile()
@@ -113,12 +127,51 @@ class ProfileFragment : Fragment() {
 
     private fun loadUserProfile() {
         lifecycleScope.launch {
+            // Ambil userId dari preference (misalnya sudah disimpan saat login)
             userPreference.getSession().collect { user ->
+                // Menampilkan nama dan username
                 tvName.text = user.name
                 tvUsername.text = "@${user.username}"
+
+                // Ambil userId dari preferensi untuk mengambil data pengguna dari API
+                val userId = user.userId
+
+                // Memanggil API untuk mendapatkan data pengguna lengkap
+                apiService.getUser(userId).enqueue(object : Callback<UserResponse> {
+                    override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                        if (response.isSuccessful) {
+                            val userResponse = response.body()
+                            userResponse?.let {
+                                // Mengambil profilePhotoUrl yang sudah lengkap
+                                val profileImageUrl = it.profilePhotoUrl
+
+                                if (!profileImageUrl.isNullOrEmpty()) {
+                                    // Memuat gambar profil dengan Glide menggunakan URL lengkap
+                                    Glide.with(requireContext())
+                                        .load(profileImageUrl) // Memuat gambar dari URL lengkap
+                                        .circleCrop() // Membuat gambar berbentuk lingkaran
+                                        .into(ivProfilePicture) // Memasukkan gambar ke dalam ImageView
+                                } else {
+                                    // Gunakan gambar default atau placeholder jika profil foto kosong
+                                    Glide.with(requireContext())
+                                        .load(R.drawable.ic_profile) // Gambar default
+                                        .circleCrop()
+                                        .into(ivProfilePicture)
+                                }
+                            }
+                        } else {
+                            Log.e("ProfileFragment", "Error fetching user profile: ${response.message()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                        Log.e("ProfileFragment", "Failed to fetch user profile: ${t.message}")
+                    }
+                })
             }
         }
     }
+
 
     private fun showLogoutConfirmationDialog() {
         val dialog = AlertDialog.Builder(requireContext())

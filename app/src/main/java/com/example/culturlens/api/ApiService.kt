@@ -66,6 +66,7 @@ interface ApiService {
     fun getComments(
         @Path("forumId") forumId: String
     ): Call<List<CommentItem>>
+
     @GET("notifications")
     fun getNotifications(
         @Header("Authorization") token: String

@@ -35,8 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
                 android:text="@string/fanny_liked_your_post"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvTime"
@@ -44,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
                 android:text="@string/_30_minutes_ago"
-                android:textSize="16sp"
+                android:textSize="10sp"
                 android:textColor="@color/grey"/>
 
         </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.culturlens.ui.forum
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -34,6 +35,10 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.Manifest
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+
 
 
 class PostForumActivity : AppCompatActivity() {
@@ -54,6 +59,7 @@ class PostForumActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_post_forum)
+        checkAndRequestPermissions()
 
         val dataStore = PreferenceDataStoreFactory.create {
             applicationContext.preferencesDataStoreFile("user_prefs")
@@ -154,10 +160,19 @@ class PostForumActivity : AppCompatActivity() {
                     }
                 }
                 REQUEST_IMAGE_CAPTURE -> {
-                    val photoUri = Uri.fromFile(photoFile)
-                    Log.d("PostForumActivity", "Captured image URI: $photoUri")
-                    displayImage(photoUri)
+                    if (::photoFile.isInitialized && photoFile.exists()) {
+                        val photoUri = FileProvider.getUriForFile(
+                            this,
+                            "com.example.culturlens.fileprovider",
+                            photoFile
+                        )
+                        Log.d("PostForumActivity", "Captured image URI: $photoUri")
+                        displayImage(photoUri)
+                    } else {
+                        Toast.makeText(this, "Gagal mengambil gambar dari kamera!", Toast.LENGTH_SHORT).show()
+                    }
                 }
+
             }
         }
     }
@@ -174,64 +189,91 @@ class PostForumActivity : AppCompatActivity() {
             userRepository.getSession().collect { user ->
                 val token = "Bearer ${user.token}"
                 val username = user.username
-                Log.d("PostForumActivity", "Token: $token")
-                Log.d("PostForumActivity", "Username: $username")
 
                 if (username.isNullOrEmpty()) {
-                    Log.e("PostForumActivity", "Username is missing!")
                     Toast.makeText(this@PostForumActivity, "Username tidak ditemukan!", Toast.LENGTH_SHORT).show()
                     return@collect
                 }
 
-                val file = FileUtils.getFileFromUri(this@PostForumActivity, photoUri)
-                if (!file.exists()) {
-                    Log.e("PostForumActivity", "File not found!")
-                    Toast.makeText(this@PostForumActivity, "File gambar tidak ditemukan!", Toast.LENGTH_SHORT).show()
-                    return@collect
-                }
+                try {
+                    // Validasi file
+                    val file = FileUtils.getFileFromUri(this@PostForumActivity, photoUri)
+                    if (!file.exists()) {
+                        Toast.makeText(this@PostForumActivity, "File gambar tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                        return@collect
+                    }
 
-                val requestBodyPhoto = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-                val photoMultipart = MultipartBody.Part.createFormData("image", file.name, requestBodyPhoto)
+                    // Buat request body
+                    val requestBodyPhoto = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+                    val photoMultipart = MultipartBody.Part.createFormData("image", file.name, requestBodyPhoto)
+                    val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
+                    val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
+                    val usernameBody = username.toRequestBody("text/plain".toMediaTypeOrNull())
 
-                val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())
-                val descriptionBody = description.toRequestBody("text/plain".toMediaTypeOrNull())
-                val usernameBody = username.toRequestBody("text/plain".toMediaTypeOrNull())
-
-                ApiClient.instance.createPost(token, titleBody, descriptionBody, usernameBody, photoMultipart)
-                    .enqueue(object : Callback<GenericResponse> {
-                        override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
-                            if (response.isSuccessful) {
-                                Toast.makeText(this@PostForumActivity, "Forum berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
-
-                                val intent = Intent(this@PostForumActivity, MainActivity::class.java)
-                                intent.putExtra("fragment", "ForumFragment")
-                                startActivity(intent)
-                                finish()
-                            } else {
-                                val errorBody = response.errorBody()?.string()
-                                Log.e("PostForumActivity", "Error response: $errorBody")
-                                Toast.makeText(this@PostForumActivity, "Gagal menambahkan forum! $errorBody", Toast.LENGTH_LONG).show()
+                    ApiClient.instance.createPost(token, titleBody, descriptionBody, usernameBody, photoMultipart)
+                        .enqueue(object : Callback<GenericResponse> {
+                            override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
+                                if (response.isSuccessful) {
+                                    Toast.makeText(this@PostForumActivity, "Forum berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(this@PostForumActivity, MainActivity::class.java)
+                                    intent.putExtra("fragment", "ForumFragment")
+                                    startActivity(intent)
+                                    finish()
+                                } else {
+                                    Log.e("PostForumActivity", "Error response: ${response.errorBody()?.string()}")
+                                    Toast.makeText(this@PostForumActivity, "Gagal menambahkan forum!", Toast.LENGTH_LONG).show()
+                                }
                             }
-                        }
 
-                        override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
-                            Log.e("PostForumActivity", "Request failed: ${t.message}")
-                            Toast.makeText(this@PostForumActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                        }
-                    })
+                            override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
+                                Log.e("PostForumActivity", "Request failed: ${t.message}")
+                                Toast.makeText(this@PostForumActivity, "Error jaringan: ${t.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+                } catch (e: Exception) {
+                    Log.e("PostForumActivity", "Exception: ${e.message}")
+                    Toast.makeText(this@PostForumActivity, "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun checkAndRequestPermissions() {
+        val permissions = mutableListOf<String>()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.CAMERA)
+        }
+
+        if (permissions.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissions.toTypedArray(), REQUEST_PERMISSION_CODE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                Toast.makeText(this, "Izin diberikan!", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Izin diperlukan untuk melanjutkan!", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
 
-
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
         private const val REQUEST_IMAGE_CAPTURE = 2
+        private const val REQUEST_PERMISSION_CODE = 100
     }
 }
-
-
-
-
-

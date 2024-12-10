@@ -12,13 +12,18 @@ data class RegisterRequest(
 )
 
 data class LoginResponse(
-    val userId: Int,
-    val name: String,
-    val username: String,
     val message: String,
     val token: String,
     val refreshToken: String,
-    val loginResult: LoginResult
+    val user: User
+)
+
+data class User(
+    val id: Int,
+    val name: String,
+    val username: String,
+    val email: String,
+    val registrationTime: String
 )
 
 data class LoginResult(

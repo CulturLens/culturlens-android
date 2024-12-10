@@ -34,7 +34,6 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     }
 
     suspend fun saveSession(user: UserModel) {
-        Log.d("UserPreference", "Saving session: $user")
         dataStore.edit { preferences ->
             preferences[USER_ID_KEY] = user.userId
             preferences[EMAIL_KEY] = user.email
@@ -44,6 +43,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[TOKEN_KEY] = user.token
         }
     }
+
 
 
 

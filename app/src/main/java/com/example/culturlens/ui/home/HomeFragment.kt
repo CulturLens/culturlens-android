@@ -71,32 +71,15 @@ class HomeFragment : Fragment() {
     private fun loadUserSession() {
         viewLifecycleOwner.lifecycleScope.launch {
             userPreference.getSession().collect { user ->
-                if (_binding != null && isAdded) {
-                    if (user.isLogin) {
-                        try {
-                            val userResponse = ApiClient.instance.getUserById(user.userId)
-                            binding.tvUsername.text = "Hello, ${userResponse.name}"
-                        } catch (e: HttpException) {
-                            Log.e("HomeFragment", "HTTP Error: ${e.message()}, Code: ${e.code()}")
-                            if (e.code() == 404) {
-                                Log.e("HomeFragment", "User not found: HTTP 404")
-                                binding.tvUsername.text = "Hello, Guest"
-                            }
-                        } catch (e: Exception) {
-                            Log.e("HomeFragment", "Error fetching user: ${e.message}")
-                            binding.tvUsername.text = "Hello, Guest"
-                        }
-                    } else {
-                        binding.tvUsername.text = "Guest"
-                        redirectToLogin()
-                    }
+                if (user.isLogin) {
+                    binding.tvUsername.text = "Hello, ${user.name}"
+                } else {
+                    binding.tvUsername.text = "Hello, Guest"
+                    redirectToLogin()
                 }
             }
         }
     }
-
-
-
 
 
     private fun redirectToLogin() {

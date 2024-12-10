@@ -5,5 +5,7 @@ data class PostRequest(
 )
 
 data class GenericResponse(
-    val message: String
+    val message: String,
+    val commentId: Int,
+    val notificationId: Int
 )

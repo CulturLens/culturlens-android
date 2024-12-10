@@ -79,13 +79,14 @@ class SigninActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
+                        val user = loginResponse.user
                         val userModel = UserModel(
-                            userId = loginResponse.userId ?: 0,
-                            email = email,
-                            name = loginResponse.name ?: "",
-                            username = loginResponse.username ?: "",
+                            userId = user.id,
+                            email = user.email,
+                            name = user.name,
+                            username = user.username,
                             isLogin = true,
-                            token = loginResponse.token ?: ""
+                            token = loginResponse.token // Menggunakan token dari respons
                         )
 
                         lifecycleScope.launch {

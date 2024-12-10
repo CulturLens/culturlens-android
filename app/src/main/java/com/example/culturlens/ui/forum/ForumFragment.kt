@@ -3,6 +3,7 @@ package com.example.culturlens.ui.forum
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,6 +92,9 @@ class ForumFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
                 if (response.isSuccessful) {
                     val forums = response.body()
+                    forums?.forEach {
+                        Log.d("ForumFragment", "Forum Image: ${it.image}")
+                    }
                     if (forums != null) {
                         forumList.clear()
                         forumList.addAll(forums)

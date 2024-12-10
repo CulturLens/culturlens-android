@@ -24,9 +24,10 @@
             android:padding="16dp">
 
             <TextView
+                android:id="@+id/newTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="New"
+                android:text="@string/new_notification"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -39,9 +40,10 @@
                 android:scrollbars="none" />
 
             <TextView
+                android:id="@+id/thisWeekTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This week"
+                android:text="@string/this_week"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -54,9 +56,10 @@
                 android:scrollbars="none" />
 
             <TextView
+                android:id="@+id/OlderTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Older"
+                android:text="@string/older"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

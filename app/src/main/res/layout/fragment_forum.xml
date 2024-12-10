@@ -12,7 +12,7 @@
         android:id="@+id/etSearchForum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search something"
+        android:hint="@string/search_something"
         android:textSize="16sp"
         android:padding="12dp"
         android:textColorHint="@color/bittersweet"

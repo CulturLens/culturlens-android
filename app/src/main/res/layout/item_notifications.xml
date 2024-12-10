@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
-                android:text="Fanny liked your post"
+                android:text="@string/fanny_liked_your_post"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
-                android:text="30 minutes ago"
+                android:text="@string/_30_minutes_ago"
                 android:textSize="16sp"
                 android:textColor="@color/grey"/>
 

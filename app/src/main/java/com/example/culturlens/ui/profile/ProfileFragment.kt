@@ -1,7 +1,9 @@
 package com.example.culturlens.ui.profile
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,11 +25,13 @@ import com.example.culturlens.ui.login.WelcomeActivity
 import com.example.culturlens.ui.dataStore
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class ProfileFragment : Fragment() {
 
     private lateinit var tvName: TextView
     private lateinit var tvUsername: TextView
+    private lateinit var btnChangeLanguage: ImageButton
 
     private val userPreference: UserPreference by lazy {
         UserPreference.getInstance(requireContext().dataStore)
@@ -45,8 +49,13 @@ class ProfileFragment : Fragment() {
 
         tvName = view.findViewById(R.id.tvName)
         tvUsername = view.findViewById(R.id.tvUsername)
+        btnChangeLanguage = view.findViewById(R.id.btnChangeLanguage)
 
         loadUserProfile()
+
+        btnChangeLanguage.setOnClickListener {
+            showLanguageDialog()
+        }
 
         val switchTheme = view.findViewById<SwitchMaterial>(R.id.switch_theme)
 
@@ -65,11 +74,40 @@ class ProfileFragment : Fragment() {
 
         val btnEditProfile = view.findViewById<Button>(R.id.btnEditProfile)
         btnEditProfile.setOnClickListener {
-            // Navigasi ke EditProfileFragment
             findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
         }
 
         return view
+    }
+
+    private fun showLanguageDialog() {
+        val languages = arrayOf("Indonesia", "English")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Pilih Bahasa")
+        builder.setItems(languages) { _, which ->
+            when (which) {
+                0 -> setLocale("id")
+                1 -> setLocale("en")
+            }
+        }
+        builder.show()
+    }
+
+    private fun setLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.setLocale(locale)
+
+        val context: Context = requireContext().createConfigurationContext(config)
+
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        val sharedPreferences = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("LANGUAGE", languageCode).apply()
+
+        requireActivity().recreate()
     }
 
     private fun loadUserProfile() {

@@ -29,8 +29,11 @@ class ResultActivity : AppCompatActivity() {
             binding.about.visibility = View.GONE
         } else {
             val classification = resultText.split(":").firstOrNull()?.lowercase()
-            val description = ClassificationInfo.descriptions[classification]
-            val prohibitions = ClassificationInfo.prohibitions[classification]?.joinToString(
+            val descriptions = ClassificationInfo.descriptions(this)
+            val prohibitionsMap = ClassificationInfo.prohibitions(this)
+
+            val description = descriptions[classification]
+            val prohibitions = prohibitionsMap[classification]?.joinToString(
                 separator = "\n• ",
                 prefix = "• "
             )

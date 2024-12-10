@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CulturLens</string>
+    <string name="title_home">Beranda</string>
+    <string name="title_forum">Forum</string>
+    <string name="title_camera">Kamera</string>
+    <string name="title_inbox">Notifikasi</string>
+    <string name="title_profile">Profil</string>
+
+    <string name="register">Daftar</string>
+    <string name="signin">Masuk</string>
+    <string name="message_welcome_page">Aplikasi deteksi objek sakral Bali untuk meningkatkan kesadaran wisatawan tentang nilai-nilai budaya Bali.</string>
+    <string name="title_welcome_page">Selamat datang di CulturLens!</string>
+    <string name="title_register_page">Selamat datang di CulturLens!</string>
+    <string name="footer_text">Sudah punya akun? </string>
+    <string name="footer_text2">Belum punya akun?</string>
+    <string name="placeholder_password">Masukkan Kata Sandi</string>
+    <string name="placeholder_name">Masukkan Nama</string>
+    <string name="placeholder_username">Masukkan Nama Pengguna</string>
+    <string name="placeholder_email">Masukkan Email</string>
+    <string name="signin_subtitle"> Masuk ke Akun Anda</string>
+    <string name="register_subtitle"> Buat Akun Anda</string>
+    <string name="signin_title">Masuk</string>
+    <string name="register_title">Daftar</string>
+
+    <string name="image_classifier_failed">Klasifikasi gambar gagal diinisialisasi. Lihat log kesalahan untuk detail lebih lanjut</string>
+    <string name="result_not_found">Gambar ini bukan objek sakral, silakan coba lagi.</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="switch_camera">Ganti Kamera</string>
+    <string name="back">Kembali</string>
+    <string name="flash">Lampu Kilat</string>
+    <string name="shutter">Shutter</string>
+    <string name="gallery">Galeri</string>
+    <string name="result">Hasil</string>
+    <string name="retry">Coba Lagi</string>
+
+    <string name="description_placeholder">Deskripsi akan muncul di sini.</string>
+    <string name="prohibitions_placeholder">Larangan akan muncul di sini.</string>
+    <string name="description_not_found">Deskripsi tidak tersedia untuk item ini.</string>
+    <string name="prohibitions_not_found">Tidak ada larangan yang ditemukan untuk item ini.</string>
+    <string name="dark_mode">Mode Gelap</string>
+    <string name="notification">Notifikasi</string>
+    <string name="language">Bahasa</string>
+    <string name="logout">Keluar</string>
+    <string name="edit">Edit</string>
+    <string name="example_name">Fanny</string>
+    <string name="example_username">\@ershefanny</string>
+    <string name="send_comment">Kirim komentar</string>
+    <string name="add_a_comment">Tambahkan komentar…</string>
+    <string name="like_icon">Ikon Suka</string>
+    <string name="post_image">Unggah Gambar</string>
+    <string name="comments">Komentar</string>
+    <string name="add_image">Tambah Gambar</string>
+    <string name="camera">Kamera</string>
+    <string name="post">Posting</string>
+    <string name="what_is_on_your_mind">Apa yang ada di pikiranmu?</string>
+    <string name="about">Tentang</string>
+    <string name="don_t">Dilarang!</string>
+    <string name="change_profile_photo">Ganti Foto Profil</string>
+    <string name="choose_from_library">Pilih dari galeri</string>
+    <string name="take_new_photo">Ambil foto baru</string>
+    <string name="edit_profile">Edit Profil</string>
+    <string name="done">Selesai</string>
+    <string name="email">Email</string>
+    <string name="phone">Telepon</string>
+    <string name="name">Nama</string>
+    <string name="username">Nama Pengguna</string>
+    <string name="search_something">Cari sesuatu</string>
+    <string name="profile_picture">Foto Profil</string>
+    <string name="small_profile_picture">Foto Profil Kecil</string>
+    <string name="what_s_on_your_mind">Apa yang ada di pikiranmu?</string>
+    <string name="analyze">Analisis</string>
+    <string name="older">Lebih Lama</string>
+    <string name="new_notification">Baru</string>
+    <string name="this_week">Minggu ini</string>
+    <string name="add_comment">Tambahkan komentar</string>
+    <string name="fanny_liked_your_post">Fanny menyukai postingan Anda</string>
+    <string name="_30_minutes_ago">30 menit yang lalu</string>
+
+    <string name="canang_desc">Canang adalah persembahan agama yang digunakan oleh umat Hindu di Bali sebagai bagian dari ritual harian mereka. Persembahan ini dapat ditemukan di kuil, rumah, dan bahkan di jalan. Canang mewakili tindakan sederhana namun penuh makna sebagai ungkapan rasa syukur kepada Tuhan.</string>
+    <string name="kain_poleng_desc">Kain poleng, sebuah kain kotak hitam-putih, adalah simbol Bali yang sering terlihat dililitkan pada pohon dan pura. Ini melambangkan dualitas, prinsip inti dari agama Hindu Bali, yang mewujudkan keseimbangan antara dua kutub : terang dan gelap, baik dan buruk, yin dan yang, mengakui bahwa keduanya tidak bisa ada tanpa yang lain. Namun, menjaga keharmonisan memerlukan keseimbangan kekuatan ini. Kain poleng juga dikenakan oleh pecalang (petugas keamanan pura), yang melambangkan peran mereka dalam membedakan yang benar dan yang salah.</string>
+    <string name="pelinggih_desc">Padmasana (Balinese: pelinggih) adalah sebuah altar berbentuk menara, yang dimahkotai dengan takhta kosong untuk memuja Tuhan dan manifestasi Tuhan Yang Maha Esa dalam agama Hindu Bali. Istilah padmasana berasal dari bahasa Sanskerta, yang berarti takhta lotus.</string>
+    <string name="gebogan_desc">Gebogan, juga dikenal sebagai Pajegan, adalah persembahan tradisional yang digunakan oleh umat Hindu di Bali. Ini terdiri dari susunan buah-buahan, makanan ringan, dan bunga yang disusun dengan rapi pada dulang (tempat penyajian persembahan). Wanita Bali sering membawa gebogan di atas kepala mereka saat membawanya ke pura sebagai bentuk persembahan kepada Tuhan.</string>
+    <string name="pelangkiran_desc">Pelangkiran berasal dari kata "langkir", yang berarti tempat ibadah. Ini adalah benda sakral yang digunakan oleh umat Hindu di Bali untuk upacara pemujaan.</string>
+    <string name="banten_saiban_desc">Banten saiban adalah persembahan yang digunakan untuk memberikan rasa syukur kepada Tuhan dalam agama Hindu di Bali. Biasanya digunakan pada acara-acara tertentu seperti perayaan hari raya atau upacara keagamaan lainnya.</string>
+    <string name="penjor_desc">Penjor adalah bambu panjang yang dihias dengan berbagai macam bahan seperti daun kelapa, bunga, dan buah. Penjor digunakan dalam upacara keagamaan di Bali sebagai simbol ucapan syukur kepada Tuhan dan penghormatan terhadap alam.</string>
+
+    <string-array name="canang_pro">
+        <item>Menginjak canang</item>
+        <item>Memungut canang</item>
+        <item>Mengambil barang dari canang, seperti makanan ringan, uang, atau persembahan lainnya</item>
+    </string-array>
+
+    <string-array name="kain_poleng_pro">
+        <item>Mengambil kain poleng</item>
+    </string-array>
+
+    <string-array name="pelinggih_pro">
+        <item>Memanjat pelinggih</item>
+        <item>Mengambil sesuatu dari pelinggih</item>
+        <item>Meletakkan sesuatu di pelinggih</item>
+    </string-array>
+
+    <string-array name="gebogan_pro">
+        <item>Mengambil makanan atau minuman dari gebogan</item>
+    </string-array>
+
+    <string-array name="pelangkiran_pro">
+        <item>Mengambil sesuatu dari pelangkiran</item>
+        <item>Meletakkan sesuatu di pelangkiran</item>
+    </string-array>
+
+    <string-array name="banten_saiban_pro">
+        <item>Menginjak banten saiban</item>
+        <item>Mengambil banten saiban</item>
+    </string-array>
+
+    <string-array name="penjor_pro">
+        <item>Memanjat penjor</item>
+        <item>Mengambil sesuatu dari penjor</item>
+        <item>Meletakkan sesuatu di penjor</item>
+    </string-array>
+
+</resources>

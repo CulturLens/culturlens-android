@@ -1,8 +1,8 @@
 package com.example.culturlens.api
 
-import com.example.culturlens.model.CommentItem
 import com.example.culturlens.model.ForumItem
 import com.example.culturlens.response.CommentRequest
+import com.example.culturlens.model.NotificationItem
 import com.example.culturlens.response.GenericResponse
 import com.example.culturlens.response.LoginRequest
 import com.example.culturlens.response.LoginResponse
@@ -39,6 +39,7 @@ interface ApiService {
         @Path("id") id: String
     ): Call<ForumItem>
 
+
     @Multipart
     @POST("forum")
     fun createPost(
@@ -64,4 +65,8 @@ interface ApiService {
     fun getComments(
         @Path("forumId") forumId: String
     ): Call<List<CommentItem>>
+    @GET("notifications")
+    fun getNotifications(
+        @Header("Authorization") token: String
+    ): Call<List<NotificationItem>>
 }

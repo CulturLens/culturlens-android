@@ -54,4 +54,86 @@
     <string name="prohibitions_placeholder">Prohibitions will appear here.</string>
     <string name="description_not_found">Description not available for this item.</string>
     <string name="prohibitions_not_found">No prohibitions found for this item.</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="notification">Notification</string>
+    <string name="language">Language</string>
+    <string name="logout">Logout</string>
+    <string name="edit">Edit</string>
+    <string name="example_name">Fanny</string>
+    <string name="example_username">\@ershefanny</string>
+    <string name="send_comment">Send comment</string>
+    <string name="add_a_comment">Add a comment…</string>
+    <string name="like_icon">Like Icon</string>
+    <string name="post_image">Post Image</string>
+    <string name="comments">Comments</string>
+    <string name="add_image">Add Image</string>
+    <string name="camera">Camera</string>
+    <string name="post">Post</string>
+    <string name="what_is_on_your_mind">What is on your mind?</string>
+    <string name="about">About</string>
+    <string name="don_t">Don\'t !</string>
+    <string name="change_profile_photo">Change Profile Photo</string>
+    <string name="choose_from_library">Choose from library</string>
+    <string name="take_new_photo">Take new photo</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="done">Done</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="search_something">Search something</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="small_profile_picture">Small Profile Picture</string>
+    <string name="what_s_on_your_mind">What\'s on your mind?</string>
+    <string name="analyze">Analyze</string>
+    <string name="older">Older</string>
+    <string name="new_notification">New</string>
+    <string name="this_week">This week</string>
+    <string name="add_comment">Add comment</string>
+    <string name="fanny_liked_your_post">Fanny liked your post</string>
+    <string name="_30_minutes_ago">30 minutes ago</string>
+
+    <string name="canang_desc">The canang is a religious offering used by Hindus in Bali as part of their daily rituals. These offerings can be found in temples, homes, and even on streets. The canang represents a simple yet meaningful gesture of gratitude to God.</string>
+    <string name="kain_poleng_desc">The kain poleng, a black-and-white chequered cloth, is a prominent Balinese symbol often seen wrapped around trees and shrines. It represents duality, a core principle of Balinese Hinduism, embodying the balance of opposites: light and dark, good and evil, yin and yang, acknowledging that neither can exist without the other. However, maintaining harmony requires keeping these forces in balance. The kain poleng is also worn by pecalang (temple security officers), symbolizing their role in discerning right from wrong.</string>
+    <string name="pelinggih_desc">A Padmasana (Balinese: pelinggih) is a shrine in the form of a tower, crowned with an empty throne to worship God and the manifestation of the Supreme God in Balinese Hindu belief. The term padmasana is derived from the Sanskrit, meaning lotus throne.</string>
+    <string name="gebogan_desc">Gebogan, also known as Pajegan, is a traditional offering used by Hindus in Bali. It typically consists of an arrangement of fruits, snacks, and flowers, carefully organized on a dulang (a tray used for arranging offerings). Balinese women often carry the gebogan on their heads when bringing it to the temple as a gesture of offering to God.</string>
+    <string name="pelangkiran_desc">Pelangkiran comes from the word "langkir," which means a place of worship. It is a sacred object used by Hindus in Bali for worshiping.</string>
+    <string name="banten_saiban_desc">Banten saiban is an offering used to express gratitude to God in Balinese Hinduism. It is typically used during certain celebrations or religious ceremonies.</string>
+    <string name="penjor_desc">Penjor is a long bamboo pole decorated with various materials such as coconut leaves, flowers, and fruits. It is used in Balinese religious ceremonies as a symbol of gratitude to God and respect for nature.</string>
+
+    <string-array name="canang_pro">
+        <item>Stepping on the canang</item>
+        <item>Taking the canang</item>
+        <item>Taking items from the canang offering, such as snacks, money, or other accompanying offerings</item>
+    </string-array>
+
+    <string-array name="kain_poleng_pro">
+        <item>Taking the kain poleng</item>
+    </string-array>
+
+    <string-array name="pelinggih_pro">
+        <item>Climbing to the pelinggih</item>
+        <item>Take something from the pelinggih</item>
+        <item>Place something on the pelinggih</item>
+    </string-array>
+
+    <string-array name="gebogan_pro">
+        <item>"Taking food or drink from the gebogan"</item>
+    </string-array>
+
+    <string-array name="pelangkiran_pro">
+        <item>Take something from the pelangkiran</item>
+        <item>Place something on the pelangkiran</item>
+    </string-array>
+
+    <string-array name="banten_saiban_pro">
+        <item>Stepping on the banten saiban</item>
+        <item>aking the banten saiban</item>
+    </string-array>
+
+    <string-array name="penjor_pro">
+        <item>Climbing to the penjor</item>
+        <item>Take something from the penjor</item>
+        <item>Place something on the penjor</item>
+    </string-array>
 </resources>

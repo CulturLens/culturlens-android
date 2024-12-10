@@ -10,13 +10,12 @@ import com.example.culturlens.R
 import com.example.culturlens.model.NotificationItem
 
 class NotificationAdapter(
-    private val notifications: List<NotificationItem>
+    private var notifications: List<NotificationItem>
 ) : RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
 
     inner class NotificationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val profilePicture: ImageView = itemView.findViewById(R.id.ivProfilePicture)
         val notificationText: TextView = itemView.findViewById(R.id.tvNotifications)
-        val time: TextView = itemView.findViewById(R.id.tvTime)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder {
@@ -29,8 +28,12 @@ class NotificationAdapter(
         val notification = notifications[position]
         holder.profilePicture.setImageResource(notification.profilePicture)
         holder.notificationText.text = notification.notificationText
-        holder.time.text = notification.time
     }
 
     override fun getItemCount(): Int = notifications.size
+
+    fun updateData(newNotifications: List<NotificationItem>) {
+        notifications = newNotifications
+        notifyDataSetChanged()
+    }
 }

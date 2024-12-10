@@ -38,7 +38,7 @@
         android:layout_height="300dp"
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
-        android:contentDescription="Post Image" />
+        android:contentDescription="@string/post_image" />
 
     <TextView
         android:id="@+id/tvPostContent"
@@ -53,7 +53,7 @@
         android:layout_height="32dp"
         android:src="@drawable/ic_like"
         android:layout_marginBottom="16dp"
-        android:contentDescription="Like Icon"/>
+        android:contentDescription="@string/like_icon"/>
 
 
     <LinearLayout
@@ -69,7 +69,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Add a comment..."
+            android:hint="@string/add_a_comment"
             android:padding="16dp"
             android:textSize="14sp"
             android:background="@android:color/transparent" />
@@ -80,14 +80,14 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:src="@drawable/ic_send"
-            android:contentDescription="Send comment"/>
+            android:contentDescription="@string/send_comment"/>
     </LinearLayout>
 
     <TextView
         android:id="@+id/textCommentsHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Comments"
+        android:text="@string/comments"
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_marginTop="16dp"

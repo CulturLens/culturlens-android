@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -45,7 +46,7 @@
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fanny"
+                    android:text="@string/example_name"
                     android:textSize="25sp"
                     android:textStyle="bold" />
 
@@ -54,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
-                    android:text="\@ershefanny"
+                    android:text="@string/example_username"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -64,9 +65,11 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/celadon_blue"
                     android:drawableLeft="@drawable/baseline_edit_24"
-                    android:text="Edit"
+                    android:minHeight="48dp"
+                    android:text="@string/edit"
                     android:textAllCaps="false"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    tools:ignore="RtlHardcoded,TextContrastCheck,TouchTargetSizeCheck" />
             </LinearLayout>
         </LinearLayout>
 
@@ -79,11 +82,11 @@
             android:background="@drawable/border_background">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:text="Dark Mode"
+                android:text="@string/dark_mode"
                 android:textSize="16sp" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -91,8 +94,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                app:thumbTint="@color/celadon_blue"
                 app:trackTint="@color/teal_200"
-                app:thumbTint="@color/celadon_blue"/>
+                tools:ignore="DuplicateSpeakableTextCheck" />
         </LinearLayout>
 
         <LinearLayout
@@ -103,11 +107,11 @@
             android:background="@drawable/border_background">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
-                android:text="Notification"
+                android:text="@string/notification"
                 android:textSize="16sp" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -127,21 +131,23 @@
         android:background="@drawable/border_background">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:paddingTop="12dp"
-                android:text="Language"
+                android:text="@string/language"
                 android:textSize="16sp"/>
 
             <ImageButton
-                android:id="@+id/btnBahasa"
+                android:id="@+id/btnChangeLanguage"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:layout_marginEnd="25dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/baseline_language_24" />
+                android:src="@drawable/baseline_language_24"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -152,12 +158,12 @@
             android:background="@drawable/border_background">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:paddingTop="12dp"
-                android:text="Logout"
+                android:text="@string/logout"
                 android:textSize="16sp"/>
 
             <ImageButton
@@ -166,12 +172,14 @@
                 android:layout_height="50dp"
                 android:layout_marginEnd="25dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/baseline_logout_24" />
+                android:contentDescription="@string/logout"
+                android:src="@drawable/baseline_logout_24"
+                tools:ignore="ImageContrastCheck,TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_activity_main"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"

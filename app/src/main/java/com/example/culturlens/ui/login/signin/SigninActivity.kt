@@ -3,11 +3,9 @@ package com.example.culturlens.ui.login.signin
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +19,6 @@ import com.example.culturlens.response.LoginRequest
 import com.example.culturlens.response.LoginResponse
 import com.example.culturlens.ui.dataStore
 import com.example.culturlens.ui.login.register.RegisterActivity
-import com.example.culturlens.ui.profile.ViewModelFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

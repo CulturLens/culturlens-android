@@ -43,7 +43,7 @@ class NotificationAdapter(
 
     fun updateData(newNotifications: List<NotificationItem>) {
         notifications = newNotifications
-        Log.d("NotificationAdapter", "Updated Notifications: $notifications")  // Log to check updated data
-        notifyDataSetChanged()  // Pastikan RecyclerView mendapatkan data baru
+        Log.d("NotificationAdapter", "Updated Notifications: $notifications")
+        notifyDataSetChanged()
     }
 }

@@ -3,6 +3,7 @@ package com.example.culturlens.ui.login.signin
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
@@ -80,13 +81,15 @@ class SigninActivity : AppCompatActivity() {
                     val loginResponse = response.body()
                     if (loginResponse != null) {
                         val user = loginResponse.user
+                        Log.d("SigninActivity", "User phone: ${user.phone}") // Cek apakah phone ada
                         val userModel = UserModel(
                             userId = user.id,
                             email = user.email,
                             name = user.name,
                             username = user.username,
                             isLogin = true,
-                            token = loginResponse.token // Menggunakan token dari respons
+                            token = loginResponse.token,
+                            phone = user.phone ?: "" // Pastikan phone ada
                         )
 
                         lifecycleScope.launch {
@@ -108,6 +111,7 @@ class SigninActivity : AppCompatActivity() {
                 showError("Error: ${t.localizedMessage ?: "Terjadi kesalahan saat menghubungi server"}")
             }
         })
+
     }
 
 

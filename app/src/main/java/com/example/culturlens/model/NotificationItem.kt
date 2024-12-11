@@ -9,5 +9,5 @@ data class NotificationItem(
     val username: String,
     @SerializedName("action_type") val actionType: String?,
     @SerializedName("profile_photo") val profilePhoto: String?,
-    @SerializedName("user_id") val userId: Int  // Pastikan menggunakan @SerializedName untuk user_id
+    @SerializedName("user_id") val userId: Int
 )

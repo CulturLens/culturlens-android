@@ -23,6 +23,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         private val USERNAME_KEY = stringPreferencesKey("username")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
         private val TOKEN_KEY = stringPreferencesKey("token")
+        private val PHONE_KEY = stringPreferencesKey("phone")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {
             return INSTANCE ?: synchronized(this) {
@@ -33,6 +34,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         }
     }
 
+    // Menyimpan session user
     suspend fun saveSession(user: UserModel) {
         dataStore.edit { preferences ->
             preferences[USER_ID_KEY] = user.userId
@@ -41,12 +43,12 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
             preferences[USERNAME_KEY] = user.username
             preferences[IS_LOGIN_KEY] = user.isLogin
             preferences[TOKEN_KEY] = user.token
+            preferences[PHONE_KEY] = user.phone ?: "" // Pastikan phone disertakan
         }
+        Log.d("UserPreference", "Saved session: ${user.username}, phone: ${user.phone}") // Log untuk memastikan
     }
 
-
-
-
+    // Mengambil session user
     fun getSession(): Flow<UserModel> {
         return dataStore.data.map { preferences ->
             val user = UserModel(
@@ -55,24 +57,24 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
                 name = preferences[NAME_KEY] ?: "",
                 username = preferences[USERNAME_KEY] ?: "",
                 isLogin = preferences[IS_LOGIN_KEY] ?: false,
-                token = preferences[TOKEN_KEY] ?: ""
+                token = preferences[TOKEN_KEY] ?: "",
+                // Menangani phone yang nullable dengan default ""
+                phone = preferences[PHONE_KEY] ?: "" // Jika phone null, beri nilai default ""
             )
-            Log.d("UserPreference", "Retrieved session: userId=${user.userId}, username=${user.username}")
+            Log.d("UserPreference", "Retrieved session: userId=${user.userId}, username=${user.username}, phone=${user.phone}") // Log untuk memeriksa
             user
         }
     }
 
-
-
+    // Status login
     val isLogin: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[IS_LOGIN_KEY] ?: false
     }
 
-
+    // Logout dan hapus session
     suspend fun logout() {
         dataStore.edit { preferences ->
             preferences.clear()
         }
     }
 }
-

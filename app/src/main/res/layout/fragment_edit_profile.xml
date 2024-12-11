@@ -54,7 +54,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/profile_picture"
+            android:src="@drawable/ic_profile"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CircularImage" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

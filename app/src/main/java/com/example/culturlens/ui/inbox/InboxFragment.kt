@@ -45,7 +45,7 @@ class InboxFragment : Fragment() {
         notificationAdapter = NotificationAdapter(emptyList())
 
         binding.rvNew.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvNew.adapter = notificationAdapter  // Set the adapter here
+        binding.rvNew.adapter = notificationAdapter
 
         getNotifications()
     }

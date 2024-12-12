@@ -35,7 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
                 android:text="@string/fanny_liked_your_post"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:maxLines="2"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/tvTime"

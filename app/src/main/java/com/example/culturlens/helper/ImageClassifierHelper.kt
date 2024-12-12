@@ -15,7 +15,7 @@ import org.tensorflow.lite.task.vision.classifier.ImageClassifier
 
 
 class ImageClassifierHelper(
-    var threshold: Float = 0.5f,
+    var threshold: Float = 0.7f,
     var maxResults: Int = 3,
     val modelName: String = "model_CulturLens.tflite",
     val context: Context,

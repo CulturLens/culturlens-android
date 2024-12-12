@@ -25,11 +25,15 @@ import com.example.culturlens.SettingsViewModelFactory
 import com.example.culturlens.api.ApiClient
 import com.example.culturlens.api.ApiService
 import com.example.culturlens.pref.UserPreference
+import com.example.culturlens.response.UserResponse
 import com.example.culturlens.ui.login.WelcomeActivity
 import com.example.culturlens.ui.dataStore
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Locale
 
 class ProfileFragment : Fragment() {
@@ -127,16 +131,39 @@ class ProfileFragment : Fragment() {
                 tvName.text = user.name
                 tvUsername.text = "@${user.username}"
 
-                // Menggunakan safe call untuk menghindari crash jika profilePhotoUrl null
-                val profileImageUrl = user.profilePhotoUrl
+                val userId = user.userId
 
-                Glide.with(requireContext())
-                    .load(profileImageUrl ?: R.drawable.ic_profile) // Jika null, gunakan gambar default
-                    .circleCrop()
-                    .into(ivProfilePicture)
+                apiService.getUser(userId).enqueue(object : Callback<UserResponse> {
+                    override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                        if (response.isSuccessful) {
+                            val userResponse = response.body()
+                            userResponse?.let {
+                                val profileImageUrl = it.profilePhotoUrl
+                                if (!profileImageUrl.isNullOrEmpty()) {
+                                    Glide.with(requireContext())
+                                        .load(profileImageUrl)
+                                        .circleCrop()
+                                        .into(ivProfilePicture)
+                                } else {
+                                    Glide.with(requireContext())
+                                        .load(R.drawable.profile_picture)
+                                        .circleCrop()
+                                        .into(ivProfilePicture)
+                                }
+                            }
+                        } else {
+                            Log.e("ProfileFragment", "Error fetching user profile: ${response.message()}")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                        Log.e("ProfileFragment", "Failed to fetch user profile: ${t.message}")
+                    }
+                })
             }
         }
     }
+
 
     private fun showLogoutConfirmationDialog() {
         val dialog = AlertDialog.Builder(requireContext())

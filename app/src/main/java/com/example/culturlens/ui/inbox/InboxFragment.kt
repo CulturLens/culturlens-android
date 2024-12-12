@@ -79,7 +79,7 @@ class InboxFragment : Fragment() {
                     Log.d("InboxFragment", "Notifications: $notifications")
 
                     val filteredNotifications = notifications.filter {
-                        it.userId == loggedInUserId && it.userId != 0
+                        it.recipientId == loggedInUserId && it.recipientId != 0
                     }
 
                     Log.d("InboxFragment", "Filtered Notifications: $filteredNotifications")
@@ -97,8 +97,6 @@ class InboxFragment : Fragment() {
             }
         })
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

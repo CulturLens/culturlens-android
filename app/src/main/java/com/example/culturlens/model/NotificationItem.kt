@@ -9,5 +9,5 @@ data class NotificationItem(
     val username: String,
     @SerializedName("action_type") val actionType: String?,
     @SerializedName("profile_photo") val profilePhoto: String?,
-    @SerializedName("user_id") val userId: Int
+    @SerializedName("recipient_id") val recipientId: Int
 )

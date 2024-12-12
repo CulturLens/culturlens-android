@@ -47,19 +47,6 @@
         android:id="@+id/navigation_profile"
         android:name="com.example.culturlens.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile">
-        <action
-            android:id="@+id/action_profileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_profile" />
 
-    <fragment
-        android:id="@+id/editProfileFragment"
-        android:name="com.example.culturlens.ui.profile.EditProfileFragment"
-        android:label="EditProfileFragment"
-        tools:layout="@layout/fragment_edit_profile" >
-        <action
-            android:id="@+id/action_editProfileFragment_to_profileFragment"
-            app:destination="@id/navigation_profile" />
-    </fragment>
 </navigation>

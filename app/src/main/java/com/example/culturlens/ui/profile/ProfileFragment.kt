@@ -63,7 +63,6 @@ class ProfileFragment : Fragment() {
 
         tvName = view.findViewById(R.id.tvName)
         tvUsername = view.findViewById(R.id.tvUsername)
-        ivProfilePicture = view.findViewById(R.id.ivProfilePicture)
         btnChangeLanguage = view.findViewById(R.id.btnChangeLanguage)
 
         loadUserProfile()
@@ -85,11 +84,6 @@ class ProfileFragment : Fragment() {
         val btnLogout = view.findViewById<ImageButton>(R.id.btnLogout)
         btnLogout.setOnClickListener {
             showLogoutConfirmationDialog()
-        }
-
-        val btnEditProfile = view.findViewById<Button>(R.id.btnEditProfile)
-        btnEditProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
         }
 
         return view
@@ -130,36 +124,6 @@ class ProfileFragment : Fragment() {
             userPreference.getSession().collect { user ->
                 tvName.text = user.name
                 tvUsername.text = "@${user.username}"
-
-                val userId = user.userId
-
-                apiService.getUser(userId).enqueue(object : Callback<UserResponse> {
-                    override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                        if (response.isSuccessful) {
-                            val userResponse = response.body()
-                            userResponse?.let {
-                                val profileImageUrl = it.profilePhotoUrl
-                                if (!profileImageUrl.isNullOrEmpty()) {
-                                    Glide.with(requireContext())
-                                        .load(profileImageUrl)
-                                        .circleCrop()
-                                        .into(ivProfilePicture)
-                                } else {
-                                    Glide.with(requireContext())
-                                        .load(R.drawable.profile_picture)
-                                        .circleCrop()
-                                        .into(ivProfilePicture)
-                                }
-                            }
-                        } else {
-                            Log.e("ProfileFragment", "Error fetching user profile: ${response.message()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                        Log.e("ProfileFragment", "Failed to fetch user profile: ${t.message}")
-                    }
-                })
             }
         }
     }

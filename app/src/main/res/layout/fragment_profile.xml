@@ -28,15 +28,6 @@
             android:paddingTop="32dp"
             android:gravity="center_vertical">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivProfilePicture"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginEnd="30dp"
-                android:src="@drawable/profile_picture"
-                android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CircularImage" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -46,9 +37,11 @@
                     android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="7dp"
                     android:text="@string/example_name"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:id="@+id/tvUsername"
@@ -57,22 +50,11 @@
                     android:layout_marginBottom="7dp"
                     android:text="@string/example_username"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_gravity="center" />
 
-                <Button
-                    android:id="@+id/btnEditProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/celadon_blue"
-                    android:drawableLeft="@drawable/baseline_edit_24"
-                    android:minHeight="48dp"
-                    android:text="@string/edit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    tools:ignore="RtlHardcoded,TextContrastCheck,TouchTargetSizeCheck" />
             </LinearLayout>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,30 +79,6 @@
                 app:thumbTint="@color/celadon_blue"
                 app:trackTint="@color/teal_200"
                 tools:ignore="DuplicateSpeakableTextCheck" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/border_background">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:text="@string/notification"
-                android:textSize="16sp" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_notification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                app:trackTint="@color/teal_200"
-                app:thumbTint="@color/celadon_blue"/>
         </LinearLayout>
 
         <LinearLayout

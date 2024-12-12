@@ -42,15 +42,14 @@ class ForumAdapter(
                 if (forumItem.isLiked) R.drawable.ic_like_fill else R.drawable.ic_like
             )
 
-            // Tambahkan URL lengkap untuk gambar
-            val fullImageUrl = forumItem.image?.let {
+            val fullImageUrl = forumItem.imageUrl?.let {
                 "https://fitur-api-124653119153.asia-southeast2.run.app/${Uri.encode(it)}"
             }
 
 
             Log.d("ForumAdapter", "Image URL: $fullImageUrl")
             Glide.with(binding.root.context)
-                .load(fullImageUrl)
+                .load(forumItem.imageUrl)
                 .placeholder(R.drawable.ic_place_holder)
                 .error(R.drawable.ic_error)
                 .into(binding.ivPostImage)

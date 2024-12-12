@@ -15,6 +15,7 @@ import com.example.culturlens.adapter.ForumAdapter
 import com.example.culturlens.api.ApiClient
 import com.example.culturlens.databinding.FragmentForumBinding
 import com.example.culturlens.model.ForumItem
+import com.example.culturlens.response.ForumsResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -87,15 +88,12 @@ class ForumFragment : Fragment() {
         binding.progressBar.visibility = View.VISIBLE
 
         val apiService = ApiClient.instance
-        apiService.getForums().enqueue(object : Callback<List<ForumItem>> {
-            override fun onResponse(call: Call<List<ForumItem>>, response: Response<List<ForumItem>>) {
+        apiService.getForums().enqueue(object : Callback<ForumsResponse> {
+            override fun onResponse(call: Call<ForumsResponse>, response: Response<ForumsResponse>) {
                 binding.progressBar.visibility = View.GONE
                 if (response.isSuccessful) {
-                    val forums = response.body()
-                    forums?.forEach {
-                        Log.d("ForumFragment", "Forum Image: ${it.image}")
-                    }
-                    if (forums != null) {
+                    val forumsResponse = response.body()
+                    forumsResponse?.forums?.let { forums ->
                         forumList.clear()
                         forumList.addAll(forums)
 
@@ -109,12 +107,13 @@ class ForumFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ForumItem>>, t: Throwable) {
+            override fun onFailure(call: Call<ForumsResponse>, t: Throwable) {
                 binding.progressBar.visibility = View.GONE
                 Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

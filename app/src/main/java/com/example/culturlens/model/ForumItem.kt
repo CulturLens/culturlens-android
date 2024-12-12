@@ -5,7 +5,7 @@ data class ForumItem(
     val title: String,
     val description: String,
     val username: String,
-    val image: String?,
+    val imageUrl: String?,
     val user_id: Int,
     val created_at: String,
     var isLiked: Boolean = false

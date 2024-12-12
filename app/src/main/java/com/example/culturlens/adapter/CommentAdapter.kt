@@ -13,7 +13,14 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-class CommentAdapter(private val comments: MutableList<CommentItem>) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+class CommentAdapter(private var comments: MutableList<CommentItem>) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+
+    // ViewHolder class
+    class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val usernameTextView: TextView = itemView.findViewById(R.id.tvUsername)
+        val commentTextView: TextView = itemView.findViewById(R.id.tvComment)
+        val createdAtTextView: TextView = itemView.findViewById(R.id.tvCreatedAt)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)
@@ -22,43 +29,29 @@ class CommentAdapter(private val comments: MutableList<CommentItem>) : RecyclerV
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val comment = comments[position]
-
-        holder.username.text = comment.username.ifEmpty { "Loading..." }
-        holder.content.text = comment.comment
-        holder.createdAt.text = formatDate(comment.created_at)
+        holder.usernameTextView.text = comment.username
+        holder.commentTextView.text = comment.comment
+        holder.createdAtTextView.text = comment.created_at
     }
 
-
-    private fun formatDate(dateString: String): String {
-        return try {
-            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-            inputFormat.timeZone = TimeZone.getTimeZone("UTC") // Karena input berupa UTC
-
-            val outputFormat = SimpleDateFormat("dd MMM yyyy HH:mm", Locale.getDefault())
-            outputFormat.timeZone = TimeZone.getDefault() // Konversi ke zona waktu lokal
-
-            val date = inputFormat.parse(dateString)
-            outputFormat.format(date ?: Date())
-        } catch (e: Exception) {
-            "Invalid Date"
-        }
+    override fun getItemCount(): Int {
+        return comments.size
     }
 
-    override fun getItemCount(): Int = comments.size
+    // Fungsi untuk memperbarui data komentar
+    fun updateComments(newComments: List<CommentItem>) {
+        comments.clear() // Hapus data lama
+        comments.addAll(newComments) // Tambahkan data baru
+        notifyDataSetChanged() // Beri tahu RecyclerView bahwa datanya telah berubah
+    }
 
+    // Fungsi untuk menambahkan komentar baru
     fun addComment(comment: CommentItem) {
-        comments.add(comment)
-        notifyDataSetChanged() // Atau tetap gunakan notifyItemInserted jika berfungsi
-        Log.d("CommentAdapter", "New comment added: ${comment.comment}")
-    }
-
-
-    class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val username: TextView = itemView.findViewById(R.id.tvUsername)
-        val content: TextView = itemView.findViewById(R.id.tvComment)
-        val createdAt: TextView = itemView.findViewById(R.id.tvCreatedAt)
+        comments.add(comment) // Tambahkan komentar ke daftar
+        notifyItemInserted(comments.size - 1) // Beri tahu RecyclerView tentang item baru
     }
 }
+
 
 
 

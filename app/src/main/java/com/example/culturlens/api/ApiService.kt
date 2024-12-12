@@ -4,6 +4,7 @@ import com.example.culturlens.model.CommentItem
 import com.example.culturlens.model.ForumItem
 import com.example.culturlens.response.CommentRequest
 import com.example.culturlens.model.NotificationItem
+import com.example.culturlens.response.ForumsResponse
 import com.example.culturlens.response.GenericResponse
 import com.example.culturlens.response.LoginRequest
 import com.example.culturlens.response.LoginResponse
@@ -36,7 +37,7 @@ interface ApiService {
 
     @GET("forums")
     fun getForums(
-    ): Call<List<ForumItem>>
+    ): Call<ForumsResponse>
 
     @GET("forum/{id}")
     fun getForumDetail(

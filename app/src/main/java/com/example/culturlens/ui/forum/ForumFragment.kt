@@ -50,6 +50,7 @@ class ForumFragment : Fragment() {
             onItemClick = { forumItem ->
                 val intent = Intent(requireContext(), DetailForumActivity::class.java)
                 intent.putExtra("forum_id", forumItem.id)
+                Log.d("ForumFragment", "Clicked Forum ID: ${forumItem.id}")
                 startActivity(intent)
             },
             onLikeClick = { forumItem ->

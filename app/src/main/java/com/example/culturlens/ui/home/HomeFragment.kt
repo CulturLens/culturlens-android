@@ -16,6 +16,7 @@ import com.example.culturlens.api.ApiClient
 import com.example.culturlens.databinding.FragmentHomeBinding
 import com.example.culturlens.model.ForumItem
 import com.example.culturlens.pref.UserPreference
+import com.example.culturlens.response.ForumsResponse
 import com.example.culturlens.ui.dataStore
 import com.example.culturlens.ui.forum.PostForumActivity
 import com.example.culturlens.ui.forum.DetailForumActivity
@@ -119,16 +120,16 @@ class HomeFragment : Fragment() {
         Log.d("HomeFragment", "Fetching forums...")
 
         val apiService = ApiClient.instance
-        apiService.getForums().enqueue(object : Callback<List<ForumItem>> {
-            override fun onResponse(call: Call<List<ForumItem>>, response: Response<List<ForumItem>>) {
+        apiService.getForums().enqueue(object : Callback<ForumsResponse> {
+            override fun onResponse(call: Call<ForumsResponse>, response: Response<ForumsResponse>) {
                 binding.progressBar.visibility = View.GONE
                 Log.d("HomeFragment", "Forum response: ${response.body()}")
 
                 if (response.isSuccessful) {
-                    response.body()?.let { forums ->
+                    response.body()?.forums?.let { forums ->
                         forumList.clear()
                         forumList.addAll(forums)
-                        forumAdapter.submitList(forumList)
+                        forumAdapter.submitList(ArrayList(forumList))
                         Log.d("HomeFragment", "Forums loaded: ${forumList.size}")
                     }
                 } else {
@@ -137,13 +138,14 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<ForumItem>>, t: Throwable) {
+            override fun onFailure(call: Call<ForumsResponse>, t: Throwable) {
                 binding.progressBar.visibility = View.GONE
                 Log.e("HomeFragment", "Network Error: ${t.message}")
                 Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
 
     override fun onDestroyView() {

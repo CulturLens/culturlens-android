@@ -13,13 +13,30 @@ import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
-class CommentAdapter(private var comments: MutableList<CommentItem>) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+class CommentAdapter(private val comments: MutableList<CommentItem>) :
+    RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
-    // ViewHolder class
-    class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val usernameTextView: TextView = itemView.findViewById(R.id.tvUsername)
-        val commentTextView: TextView = itemView.findViewById(R.id.tvComment)
-        val createdAtTextView: TextView = itemView.findViewById(R.id.tvCreatedAt)
+    inner class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val usernameTextView: TextView = itemView.findViewById(R.id.tvUsername)
+        private val commentTextView: TextView = itemView.findViewById(R.id.tvComment)
+        private val createdAtTextView: TextView = itemView.findViewById(R.id.tvCreatedAt)
+
+        fun bind(comment: CommentItem) {
+            usernameTextView.text = comment.username
+            commentTextView.text = comment.comment
+            createdAtTextView.text = formatCreatedAt(comment.created_at)
+        }
+
+        private fun formatCreatedAt(createdAt: String): String {
+            return try {
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                val outputFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+                val date = inputFormat.parse(createdAt)
+                date?.let { outputFormat.format(it) } ?: createdAt
+            } catch (e: Exception) {
+                createdAt
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -29,29 +46,19 @@ class CommentAdapter(private var comments: MutableList<CommentItem>) : RecyclerV
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val comment = comments[position]
-        holder.usernameTextView.text = comment.username
-        holder.commentTextView.text = comment.comment
-        holder.createdAtTextView.text = comment.created_at
+        holder.bind(comment)
     }
 
-    override fun getItemCount(): Int {
-        return comments.size
-    }
+    override fun getItemCount(): Int = comments.size
 
-    // Fungsi untuk memperbarui data komentar
     fun updateComments(newComments: List<CommentItem>) {
-        comments.clear() // Hapus data lama
-        comments.addAll(newComments) // Tambahkan data baru
-        notifyDataSetChanged() // Beri tahu RecyclerView bahwa datanya telah berubah
+        comments.clear()
+        comments.addAll(newComments)
+        notifyDataSetChanged()
     }
 
-    // Fungsi untuk menambahkan komentar baru
     fun addComment(comment: CommentItem) {
-        comments.add(comment) // Tambahkan komentar ke daftar
-        notifyItemInserted(comments.size - 1) // Beri tahu RecyclerView tentang item baru
+        comments.add(comment)
+        notifyItemInserted(comments.size - 1)
     }
 }
-
-
-
-

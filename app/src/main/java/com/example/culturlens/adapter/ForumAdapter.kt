@@ -46,7 +46,6 @@ class ForumAdapter(
                 "https://fitur-api-124653119153.asia-southeast2.run.app/${Uri.encode(it)}"
             }
 
-
             Log.d("ForumAdapter", "Image URL: $fullImageUrl")
             Glide.with(binding.root.context)
                 .load(forumItem.imageUrl)
@@ -54,12 +53,12 @@ class ForumAdapter(
                 .error(R.drawable.ic_error)
                 .into(binding.ivPostImage)
 
-
-            binding.root.setOnClickListener { onItemClick(forumItem) }
+            binding.root.setOnClickListener {
+                onItemClick(forumItem)
+            }
             binding.ivLike.setOnClickListener { onLikeClick(forumItem) }
         }
     }
-
-
 }
+
 

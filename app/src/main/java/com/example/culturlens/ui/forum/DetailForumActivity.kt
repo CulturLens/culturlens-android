@@ -95,9 +95,12 @@ class DetailForumActivity : AppCompatActivity() {
         val apiService = ApiClient.instance
         apiService.getForumDetail(forumId).enqueue(object : Callback<ForumItem> {
             override fun onResponse(call: Call<ForumItem>, response: Response<ForumItem>) {
-                Log.d("DetailForumActivity", "API response: ${response.body()}")
                 if (response.isSuccessful) {
-                    response.body()?.let { populateForumDetails(it) }
+                    response.body()?.let { forumItem ->
+                        populateForumDetails(forumItem)
+                    } ?: run {
+                        Toast.makeText(this@DetailForumActivity, "Forum details not found", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(this@DetailForumActivity, "Failed to load forum details", Toast.LENGTH_SHORT).show()
                 }
@@ -112,11 +115,9 @@ class DetailForumActivity : AppCompatActivity() {
     private fun populateForumDetails(forumItem: ForumItem) {
         findViewById<TextView>(R.id.tvUsername).text = forumItem.username
         findViewById<TextView>(R.id.tvPostContent).text = forumItem.description
-        val fullImageUrl = "http://fitur-api-124653119153.asia-southeast2.run.app/${forumItem.imageUrl}"
 
-        Log.d("DetailForumActivity", "Loading Image from URL: $fullImageUrl")
         Glide.with(this)
-            .load(fullImageUrl)
+            .load(forumItem.imageUrl)
             .placeholder(R.drawable.ic_place_holder)
             .error(R.drawable.ic_error)
             .into(findViewById(R.id.ivPostImage))
@@ -147,33 +148,23 @@ class DetailForumActivity : AppCompatActivity() {
     }
 
     private fun fetchComments() {
-        lifecycleScope.launch {
-            try {
-                val apiService = ApiClient.instance
-                val response = apiService.getComments(forumId).execute()
-
+        val apiService = ApiClient.instance
+        apiService.getComments(forumId).enqueue(object : Callback<List<CommentItem>> {
+            override fun onResponse(call: Call<List<CommentItem>>, response: Response<List<CommentItem>>) {
                 if (response.isSuccessful) {
                     val comments = response.body() ?: listOf()
-
-                    val updatedComments = coroutineScope {
-                        comments.map { comment ->
-                            async {
-                                val username = fetchUsernameSync(comment.user_id)
-                                comment.copy(username = username)
-                            }
-                        }.awaitAll()
-                    }
-
-                    commentAdapter = CommentAdapter(updatedComments.toMutableList())
-                    recyclerView.adapter = commentAdapter
+                    commentAdapter.updateComments(comments)
                 } else {
                     Toast.makeText(this@DetailForumActivity, "Failed to load comments", Toast.LENGTH_SHORT).show()
                 }
-            } catch (e: Exception) {
-                Toast.makeText(this@DetailForumActivity, "Network Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-        }
+
+            override fun onFailure(call: Call<List<CommentItem>>, t: Throwable) {
+                Toast.makeText(this@DetailForumActivity, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
+
 
     private suspend fun fetchUsernameSync(userId: Int): String {
         return suspendCancellableCoroutine { continuation ->
@@ -195,50 +186,25 @@ class DetailForumActivity : AppCompatActivity() {
     }
 
     private fun postComment(commentText: String) {
-        lifecycleScope.launch {
-            try {
-                val currentUser = userRepository.getSession().first()
+        val apiService = ApiClient.instance
+        val commentRequest = CommentRequest(commentText)
 
-                val currentUserId = currentUser.userId
-                val currentUsername = currentUser.username
-
-                val apiService = ApiClient.instance
-                val commentRequest = CommentRequest(commentText)
-
-                apiService.postComment(forumId, commentRequest).enqueue(object : Callback<GenericResponse> {
-                    override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body()
-                            if (responseBody != null) {
-                                Toast.makeText(this@DetailForumActivity, "Comment posted!", Toast.LENGTH_SHORT).show()
-
-                                val newComment = CommentItem(
-                                    id = responseBody.commentId,
-                                    username = currentUsername,
-                                    post_id = forumId.toInt(),
-                                    user_id = currentUserId,
-                                    comment = commentText,
-                                    created_at = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(Date())
-                                )
-
-                                commentAdapter.addComment(newComment)
-                                recyclerView.scrollToPosition(commentAdapter.itemCount - 1)
-                            }
-                        } else {
-                            Log.e("DetailForumActivity", "Error: ${response.errorBody()?.string()}")
-                            Toast.makeText(this@DetailForumActivity, "Failed to post comment", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
-                        Log.e("DetailForumActivity", "Network Error: ${t.message}")
-                        Toast.makeText(this@DetailForumActivity, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            } catch (e: Exception) {
-                Log.e("DetailForumActivity", "Error retrieving user session: ${e.message}")
-                Toast.makeText(this@DetailForumActivity, "Failed to retrieve user session", Toast.LENGTH_SHORT).show()
+        apiService.postComment(forumId, commentRequest).enqueue(object : Callback<GenericResponse> {
+            override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@DetailForumActivity, "Comment posted!", Toast.LENGTH_SHORT).show()
+                    // Fetch updated comments
+                    fetchComments()
+                    commentEditText.text.clear()
+                } else {
+                    Toast.makeText(this@DetailForumActivity, "Failed to post comment", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
+
+            override fun onFailure(call: Call<GenericResponse>, t: Throwable) {
+                Toast.makeText(this@DetailForumActivity, "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
+
 }

@@ -100,6 +100,9 @@
     <string name="pelangkiran_desc">Pelangkiran comes from the word "langkir," which means a place of worship. It is a sacred object used by Hindus in Bali for worshiping.</string>
     <string name="banten_saiban_desc">Banten saiban is an offering used to express gratitude to God in Balinese Hinduism. It is typically used during certain celebrations or religious ceremonies.</string>
     <string name="penjor_desc">Penjor is a long bamboo pole decorated with various materials such as coconut leaves, flowers, and fruits. It is used in Balinese religious ceremonies as a symbol of gratitude to God and respect for nature.</string>
+    <string name="suggested_for_you">Suggested for you</string>
+    <string name="hello">Hello, %1$s</string>
+    <string name="hello_guest">Hello, Guest</string>
 
     <string-array name="canang_pro">
         <item>Stepping on the canang</item>

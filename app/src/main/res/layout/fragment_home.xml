@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Suggested for you"
+                android:text="@string/suggested_for_you"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />

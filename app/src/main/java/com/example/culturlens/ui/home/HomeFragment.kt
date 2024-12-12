@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.culturlens.R
 import com.example.culturlens.adapter.ForumAdapter
 import com.example.culturlens.api.ApiClient
 import com.example.culturlens.databinding.FragmentHomeBinding
@@ -73,9 +74,9 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             userPreference.getSession().collect { user ->
                 if (user.isLogin) {
-                    binding.tvUsername.text = "Hello, ${user.name}"
+                    binding.tvUsername.text = getString(R.string.hello, user.name)
                 } else {
-                    binding.tvUsername.text = "Hello, Guest"
+                    binding.tvUsername.text = getString(R.string.hello_guest)
                     redirectToLogin()
                 }
             }

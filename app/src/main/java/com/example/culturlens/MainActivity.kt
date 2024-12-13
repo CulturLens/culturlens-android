@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.culturlens.databinding.ActivityMainBinding
+import com.example.culturlens.ui.camera.CameraFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,5 +49,12 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        val navigateTo = intent.getStringExtra("navigate_to")
+        if (navigateTo == "CameraFragment") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, CameraFragment())
+                .commit()
+        }
     }
 }

@@ -43,8 +43,3 @@ class ForumViewModel(private val repository: ForumRepository) : ViewModel() {
         })
     }
 }
-
-
-
-
-

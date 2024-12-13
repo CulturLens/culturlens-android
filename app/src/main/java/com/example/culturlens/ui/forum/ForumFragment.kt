@@ -102,4 +102,3 @@ class ForumFragment : Fragment() {
         _binding = null
     }
 }
-

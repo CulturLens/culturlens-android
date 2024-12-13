@@ -1,6 +1,5 @@
 package com.example.culturlens.adapter
 
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -52,7 +51,3 @@ class ForumAdapter(
         }
     }
 }
-
-
-
-

@@ -73,9 +73,9 @@ class DetailForumActivity : AppCompatActivity() {
             updateLikeIcon(isLiked)
         }
 
-        likeIcon.setOnClickListener {
-            forumViewModel.toggleLikeStatus(forumId)
-        }
+//        likeIcon.setOnClickListener {
+//            forumViewModel.toggleLikeStatus(forumId)
+//        }
 
         sendButton.setOnClickListener {
             val commentText = commentEditText.text.toString().trim()
@@ -193,7 +193,6 @@ class DetailForumActivity : AppCompatActivity() {
             override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
                 if (response.isSuccessful) {
                     Toast.makeText(this@DetailForumActivity, "Comment posted!", Toast.LENGTH_SHORT).show()
-                    // Fetch updated comments
                     fetchComments()
                     commentEditText.text.clear()
                 } else {

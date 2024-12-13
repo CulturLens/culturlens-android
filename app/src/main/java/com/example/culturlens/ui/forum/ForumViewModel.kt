@@ -18,9 +18,9 @@ class ForumViewModel : ViewModel() {
         _forumLikeStatus.value = mutableMapOf()
     }
 
-    fun toggleLikeStatus(forumId: String) {
+    fun toggleLikeStatus(forumId: String, isLiked: Boolean) {
         _forumLikeStatus.value = _forumLikeStatus.value?.apply {
-            this[forumId] = !(this[forumId] ?: false)
+            this[forumId] = isLiked
         }
     }
 

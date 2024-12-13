@@ -6,6 +6,8 @@ import com.example.culturlens.response.CommentRequest
 import com.example.culturlens.model.NotificationItem
 import com.example.culturlens.response.ForumsResponse
 import com.example.culturlens.response.GenericResponse
+import com.example.culturlens.response.LikeRequest
+import com.example.culturlens.response.LikesResponse
 import com.example.culturlens.response.LoginRequest
 import com.example.culturlens.response.LoginResponse
 import com.example.culturlens.response.RegisterRequest
@@ -80,4 +82,17 @@ interface ApiService {
     fun getNotifications(
         @Header("Authorization") token: String
     ): Call<List<NotificationItem>>
+
+    @POST("like")
+    fun likePost(
+        @Body likeRequest: LikeRequest
+    ): Call<GenericResponse>
+
+    @GET("likes/user/{userId}")
+    fun getUserLikes(
+        @Path("userId") userId: Int
+    ): Call<LikesResponse>
+
+    @GET("likes/{post_id}")
+    fun getUsersWhoLikedPost(@Path("post_id") postId: Int): Call<List<User>>
 }

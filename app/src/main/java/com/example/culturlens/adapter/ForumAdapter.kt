@@ -13,7 +13,7 @@ import com.example.culturlens.model.ForumItem
 class ForumAdapter(
     private var forumList: List<ForumItem>,
     private val onItemClick: (ForumItem) -> Unit,
-    private val onLikeClick: (ForumItem) -> Unit
+    private val onLikeClick: (ForumItem, Boolean) -> Unit
 ) : RecyclerView.Adapter<ForumAdapter.ForumViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForumViewHolder {
@@ -23,6 +23,7 @@ class ForumAdapter(
 
     override fun onBindViewHolder(holder: ForumViewHolder, position: Int) {
         val forumItem = forumList[position]
+        Log.d("ForumAdapter", "Binding item: ${forumItem.title}")
         holder.bind(forumItem)
     }
 
@@ -42,13 +43,9 @@ class ForumAdapter(
                 if (forumItem.isLiked) R.drawable.ic_like_fill else R.drawable.ic_like
             )
 
-            val fullImageUrl = forumItem.imageUrl?.let {
-                "https://fitur-api-124653119153.asia-southeast2.run.app/${Uri.encode(it)}"
-            }
-
-            Log.d("ForumAdapter", "Image URL: $fullImageUrl")
+            val fullImageUrl = forumItem.imageUrl
             Glide.with(binding.root.context)
-                .load(forumItem.imageUrl)
+                .load(fullImageUrl)
                 .placeholder(R.drawable.ic_place_holder)
                 .error(R.drawable.ic_error)
                 .into(binding.ivPostImage)
@@ -56,9 +53,18 @@ class ForumAdapter(
             binding.root.setOnClickListener {
                 onItemClick(forumItem)
             }
-            binding.ivLike.setOnClickListener { onLikeClick(forumItem) }
+
+            binding.ivLike.setOnClickListener {
+                val isCurrentlyLiked = forumItem.isLiked
+                forumItem.isLiked = !isCurrentlyLiked
+                binding.ivLike.setImageResource(
+                    if (forumItem.isLiked) R.drawable.ic_like_fill else R.drawable.ic_like
+                )
+                onLikeClick(forumItem, forumItem.isLiked)
+            }
         }
     }
 }
+
 
 

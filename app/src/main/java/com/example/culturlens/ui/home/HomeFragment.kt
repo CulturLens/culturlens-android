@@ -83,7 +83,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     private fun redirectToLogin() {
         val intent = Intent(requireContext(), SigninActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -98,8 +97,8 @@ class HomeFragment : Fragment() {
                 intent.putExtra("forum_id", forumItem.id)
                 startActivity(intent)
             },
-            onLikeClick = { forumItem ->
-                forumViewModel.toggleLikeStatus(forumItem.id)
+            onLikeClick = { forumItem, isLiked ->
+                forumViewModel.toggleLikeStatus(forumItem.id, isLiked)
             }
         )
 
@@ -118,36 +117,29 @@ class HomeFragment : Fragment() {
 
     private fun fetchForums() {
         binding.progressBar.visibility = View.VISIBLE
-        Log.d("HomeFragment", "Fetching forums...")
 
         val apiService = ApiClient.instance
         apiService.getForums().enqueue(object : Callback<ForumsResponse> {
             override fun onResponse(call: Call<ForumsResponse>, response: Response<ForumsResponse>) {
                 binding.progressBar.visibility = View.GONE
-                Log.d("HomeFragment", "Forum response: ${response.body()}")
 
                 if (response.isSuccessful) {
                     response.body()?.forums?.let { forums ->
                         forumList.clear()
                         forumList.addAll(forums)
                         forumAdapter.submitList(ArrayList(forumList))
-                        Log.d("HomeFragment", "Forums loaded: ${forumList.size}")
                     }
                 } else {
-                    Log.e("HomeFragment", "Failed to load forums: ${response.message()}")
                     Toast.makeText(requireContext(), "Failed to load forums", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ForumsResponse>, t: Throwable) {
                 binding.progressBar.visibility = View.GONE
-                Log.e("HomeFragment", "Network Error: ${t.message}")
                 Toast.makeText(requireContext(), "Network Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

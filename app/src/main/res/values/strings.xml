@@ -103,6 +103,7 @@
     <string name="suggested_for_you">Suggested for you</string>
     <string name="hello">Hello, %1$s</string>
     <string name="hello_guest">Hello, Guest</string>
+    <string name="like_count">Like Count</string>
 
     <string-array name="canang_pro">
         <item>Stepping on the canang</item>

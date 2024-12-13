@@ -62,16 +62,6 @@
                 android:contentDescription="@string/like_icon"
                 android:layout_alignParentStart="true"/>
 
-            <TextView
-                android:id="@+id/tvAddComment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_comment"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:fontFamily="sans-serif"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true" />
         </RelativeLayout>
 
 

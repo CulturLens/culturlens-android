@@ -200,7 +200,6 @@ class PostForumActivity : AppCompatActivity() {
                 }
 
                 try {
-                    // Validasi file
                     val file = FileUtils.getFileFromUri(this@PostForumActivity, photoUri)
                     if (!file.exists()) {
                         Toast.makeText(this@PostForumActivity,
@@ -208,7 +207,6 @@ class PostForumActivity : AppCompatActivity() {
                         return@collect
                     }
 
-                    // Buat request body
                     val requestBodyPhoto = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
                     val photoMultipart = MultipartBody.Part.createFormData("image", file.name, requestBodyPhoto)
                     val titleBody = title.toRequestBody("text/plain".toMediaTypeOrNull())

@@ -1,27 +1,18 @@
 package com.example.culturlens.ui.forum
 
-
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.culturlens.R
 import com.example.culturlens.adapter.ForumAdapter
 import com.example.culturlens.api.ApiClient
 import com.example.culturlens.databinding.FragmentForumBinding
-import com.example.culturlens.model.ForumItem
-import com.example.culturlens.response.ForumsResponse
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class ForumFragment : Fragment() {
@@ -30,12 +21,11 @@ class ForumFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var forumAdapter: ForumAdapter
-    private val forumList = mutableListOf<ForumItem>()
-    private val filteredForumList = mutableListOf<ForumItem>()
+    private lateinit var forumViewModel: ForumViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentForumBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,90 +33,68 @@ class ForumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Ensure binding is not null before using it
-        _binding?.let { binding ->
-            setupRecyclerView()
-            setupSearchBar()
-            fetchForums()
+        val apiService = ApiClient.instance
+        val repository = ForumRepository(apiService)
+        val factory = ForumViewModelFactory(repository)
+        forumViewModel = ViewModelProvider(this, factory)[ForumViewModel::class.java]
 
-            // Set up TextView for "Post Forum"
-            val tvPostForum: TextView = binding.tvPostForum
-            tvPostForum.setOnClickListener {
-                // Navigate to PostForumActivity
-                val intent = Intent(requireContext(), PostForumActivity::class.java)
-                startActivity(intent)
+        setupRecyclerView()
+        setupSearchBar()
+
+        forumViewModel.forums.observe(viewLifecycleOwner) { forums ->
+            forumAdapter.submitList(forums)
+        }
+
+        forumViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        forumViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.tvPostForum.setOnClickListener {
+            val intent = Intent(requireContext(), PostForumActivity::class.java)
+            startActivity(intent)
+        }
+
+        forumViewModel.fetchForums()
     }
 
     private fun setupRecyclerView() {
         forumAdapter = ForumAdapter(
-            forumList = filteredForumList,
+            forumList = emptyList(),
             onItemClick = { forumItem ->
                 Toast.makeText(requireContext(), "Forum item: ${forumItem.title}", Toast.LENGTH_SHORT).show()
             }
         )
 
-        _binding?.recyclerViewForum?.apply {
+        binding.recyclerViewForum.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = forumAdapter
-            Log.d("ForumFragment", "RecyclerView setup complete, items count: ${forumAdapter.itemCount}")
         }
     }
 
     private fun setupSearchBar() {
-        _binding?.etSearchForum?.addTextChangedListener { text ->
+        binding.etSearchForum.addTextChangedListener { text ->
             val query = text.toString().trim()
             filterForums(query)
         }
     }
 
     private fun filterForums(query: String) {
-        filteredForumList.clear()
-        if (query.isEmpty()) {
-            filteredForumList.addAll(forumList)
+        val currentList = forumViewModel.forums.value.orEmpty()
+        val filteredList = if (query.isEmpty()) {
+            currentList
         } else {
-            filteredForumList.addAll(
-                forumList.filter {
-                    it.title.contains(query, ignoreCase = true) ||
-                            it.description.contains(query, ignoreCase = true)
-                }
-            )
+            currentList.filter {
+                it.title.contains(query, ignoreCase = true) ||
+                        it.description.contains(query, ignoreCase = true)
+            }
         }
-        forumAdapter.notifyDataSetChanged()
-    }
-
-    private fun fetchForums() {
-        _binding?.progressBar?.visibility = View.VISIBLE
-
-        val apiService = ApiClient.instance
-        apiService.getForums().enqueue(object : Callback<ForumsResponse> {
-            override fun onResponse(call: Call<ForumsResponse>, response: Response<ForumsResponse>) {
-                _binding?.progressBar?.visibility = View.GONE
-
-                if (response.isSuccessful) {
-                    val forumsResponse = response.body()
-
-                    forumsResponse?.forums?.let { forums ->
-                        forumList.clear()
-                        forumList.addAll(forums)
-                        filteredForumList.clear()
-                        filteredForumList.addAll(forumList)
-                        forumAdapter.notifyDataSetChanged()
-                    }
-
-                } else {
-                    Toast.makeText(requireContext(),
-                        getString(R.string.failed_to_load_forums), Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ForumsResponse>, t: Throwable) {
-                _binding?.progressBar?.visibility = View.GONE
-                Toast.makeText(requireContext(),
-                    getString(R.string.network_error, t.message), Toast.LENGTH_SHORT).show()
-            }
-        })
+        forumAdapter.submitList(filteredList)
     }
 
     override fun onDestroyView() {
@@ -134,10 +102,4 @@ class ForumFragment : Fragment() {
         _binding = null
     }
 }
-
-
-
-
-
-
 

@@ -28,7 +28,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/name"
                     android:textStyle="bold"
-                    android:textSize="16sp" />
+                    android:paddingTop="16dp"
+                    android:paddingHorizontal="16dp"
+                    android:textSize="22sp" />
             </LinearLayout>
 
             <ImageView

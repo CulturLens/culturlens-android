@@ -12,8 +12,7 @@ import com.example.culturlens.model.ForumItem
 
 class ForumAdapter(
     private var forumList: List<ForumItem>,
-    private val onItemClick: (ForumItem) -> Unit,
-    private val onLikeClick: (ForumItem, Boolean) -> Unit
+    private val onItemClick: (ForumItem) -> Unit
 ) : RecyclerView.Adapter<ForumAdapter.ForumViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForumViewHolder {
@@ -39,9 +38,6 @@ class ForumAdapter(
         fun bind(forumItem: ForumItem) {
             binding.tvUsername.text = forumItem.username
             binding.tvDescription.text = forumItem.description
-            binding.ivLike.setImageResource(
-                if (forumItem.isLiked) R.drawable.ic_like_fill else R.drawable.ic_like
-            )
 
             val fullImageUrl = forumItem.imageUrl
             Glide.with(binding.root.context)
@@ -53,18 +49,10 @@ class ForumAdapter(
             binding.root.setOnClickListener {
                 onItemClick(forumItem)
             }
-
-            binding.ivLike.setOnClickListener {
-                val isCurrentlyLiked = forumItem.isLiked
-                forumItem.isLiked = !isCurrentlyLiked
-                binding.ivLike.setImageResource(
-                    if (forumItem.isLiked) R.drawable.ic_like_fill else R.drawable.ic_like
-                )
-                onLikeClick(forumItem, forumItem.isLiked)
-            }
         }
     }
 }
+
 
 
 

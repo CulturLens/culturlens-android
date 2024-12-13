@@ -82,7 +82,6 @@ class PostForumActivity : AppCompatActivity() {
                     tvUsername.text = username
                 } else {
                     tvUsername.text = "Username tidak ditemukan"
-                    Log.e("PostForumActivity", "Username tidak ditemukan dalam sesi.")
                 }
             }
         }
@@ -100,17 +99,20 @@ class PostForumActivity : AppCompatActivity() {
             val description = tvDescription.text.toString().trim()
 
             if (title.isEmpty()) {
-                Toast.makeText(this, "Judul tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.judul_tidak_boleh_kosong), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (description.isEmpty()) {
-                Toast.makeText(this, "Deskripsi tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.deskripsi_tidak_boleh_kosong), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (selectedPhotoUri == null) {
-                Toast.makeText(this, "Tambahkan gambar untuk forum!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.tambahkan_gambar_untuk_forum), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -169,7 +171,8 @@ class PostForumActivity : AppCompatActivity() {
                         Log.d("PostForumActivity", "Captured image URI: $photoUri")
                         displayImage(photoUri)
                     } else {
-                        Toast.makeText(this, "Gagal mengambil gambar dari kamera!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this,
+                            getString(R.string.gagal_mengambil_gambar_dari_kamera), Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -191,7 +194,8 @@ class PostForumActivity : AppCompatActivity() {
                 val username = user.username
 
                 if (username.isNullOrEmpty()) {
-                    Toast.makeText(this@PostForumActivity, "Username tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PostForumActivity,
+                        getString(R.string.username_tidak_ditemukan), Toast.LENGTH_SHORT).show()
                     return@collect
                 }
 
@@ -199,7 +203,8 @@ class PostForumActivity : AppCompatActivity() {
                     // Validasi file
                     val file = FileUtils.getFileFromUri(this@PostForumActivity, photoUri)
                     if (!file.exists()) {
-                        Toast.makeText(this@PostForumActivity, "File gambar tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PostForumActivity,
+                            getString(R.string.file_gambar_tidak_ditemukan), Toast.LENGTH_SHORT).show()
                         return@collect
                     }
 
@@ -214,14 +219,16 @@ class PostForumActivity : AppCompatActivity() {
                         .enqueue(object : Callback<GenericResponse> {
                             override fun onResponse(call: Call<GenericResponse>, response: Response<GenericResponse>) {
                                 if (response.isSuccessful) {
-                                    Toast.makeText(this@PostForumActivity, "Forum berhasil ditambahkan!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@PostForumActivity,
+                                        getString(R.string.forum_berhasil_ditambahkan), Toast.LENGTH_SHORT).show()
                                     val intent = Intent(this@PostForumActivity, MainActivity::class.java)
                                     intent.putExtra("fragment", "ForumFragment")
                                     startActivity(intent)
                                     finish()
                                 } else {
                                     Log.e("PostForumActivity", "Error response: ${response.errorBody()?.string()}")
-                                    Toast.makeText(this@PostForumActivity, "Gagal menambahkan forum!", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@PostForumActivity,
+                                        getString(R.string.gagal_menambahkan_forum), Toast.LENGTH_LONG).show()
                                 }
                             }
 
@@ -232,7 +239,8 @@ class PostForumActivity : AppCompatActivity() {
                         })
                 } catch (e: Exception) {
                     Log.e("PostForumActivity", "Exception: ${e.message}")
-                    Toast.makeText(this@PostForumActivity, "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@PostForumActivity,
+                        getString(R.string.terjadi_kesalahan, e.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -263,9 +271,10 @@ class PostForumActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                Toast.makeText(this, "Izin diberikan!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.izin_diberikan), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Izin diperlukan untuk melanjutkan!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.izin_diperlukan_untuk_melanjutkan), Toast.LENGTH_SHORT).show()
             }
         }
     }

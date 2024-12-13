@@ -104,6 +104,20 @@
     <string name="hello">Hello, %1$s</string>
     <string name="hello_guest">Hello, Guest</string>
     <string name="like_count">Like Count</string>
+    <string name="judul_tidak_boleh_kosong">Judul tidak boleh kosong!</string>
+    <string name="deskripsi_tidak_boleh_kosong">Deskripsi tidak boleh kosong!</string>
+    <string name="tambahkan_gambar_untuk_forum">Tambahkan gambar untuk forum!</string>
+    <string name="gagal_mengambil_gambar_dari_kamera">Gagal mengambil gambar dari kamera!</string>
+    <string name="username_tidak_ditemukan">Username tidak ditemukan!</string>
+    <string name="file_gambar_tidak_ditemukan">File gambar tidak ditemukan!</string>
+    <string name="forum_berhasil_ditambahkan">Forum berhasil ditambahkan!</string>
+    <string name="gagal_menambahkan_forum">Gagal menambahkan forum!</string>
+    <string name="terjadi_kesalahan">Terjadi kesalahan: %1$s</string>
+    <string name="izin_diberikan">Izin diberikan!</string>
+    <string name="izin_diperlukan_untuk_melanjutkan">Izin diperlukan untuk melanjutkan!</string>
+    <string name="failed_to_load_forums">Failed to load forums</string>
+    <string name="network_error">Network Error: %1$s</string>
+    <string name="post_forum">Post Forum</string>
 
     <string-array name="canang_pro">
         <item>Stepping on the canang</item>

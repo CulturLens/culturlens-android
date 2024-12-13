@@ -89,7 +89,7 @@ class SigninActivity : AppCompatActivity() {
                             username = user.username,
                             isLogin = true,
                             token = loginResponse.token,
-                            phone = user.phone ?: "" // Pastikan phone ada
+                            phone = user.phone ?: ""
                         )
 
                         lifecycleScope.launch {

@@ -16,11 +16,24 @@
         android:textSize="16sp"
         android:padding="12dp"
         android:textColorHint="@color/bittersweet"
+        android:textColor="@color/black"
         android:layout_marginTop="32dp"
         android:background="@drawable/bg_share_something"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="16dp"
         android:inputType="text" />
+
+    <TextView
+        android:id="@+id/tvPostForum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/post_forum"
+        android:textColor="@color/bittersweet"
+        android:textSize="16sp"
+        android:layout_gravity="end"
+        android:padding="6dp"
+        android:clickable="true"
+        android:focusable="true"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewForum"

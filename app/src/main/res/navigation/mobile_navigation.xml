@@ -3,13 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
-
-    <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.culturlens.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+    app:startDestination="@+id/navigation_forum">
 
     <fragment
         android:id="@+id/navigation_forum"
@@ -36,12 +30,6 @@
         android:name="com.example.culturlens.ui.camera.ImageFragment"
         android:label="ImageFragment"
         tools:layout="@layout/fragment_image" />
-
-    <fragment
-        android:id="@+id/navigation_inbox"
-        android:name="com.example.culturlens.ui.inbox.InboxFragment"
-        android:label="@string/title_inbox"
-        tools:layout="@layout/fragment_inbox" />
 
     <fragment
         android:id="@+id/navigation_profile"
